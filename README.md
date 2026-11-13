@@ -111,6 +111,22 @@ Ces contrôles portent sur la **version 1.1.0**. La précision dépend de la voi
 
 [Validation continue](docs/CI.md) · [Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
 
+## Précision : une première mesure publique
+
+**676 enregistrements humains · 332 phrases distinctes · 117 minutes de parole française.** Le split de test FLEURS épinglé a été évalué en entier, sur GPU CUDA, avec les réglages par défaut et un dictionnaire vide. Les mêmes extraits ont été évalués sans bruit ajouté puis avec deux niveaux de bruit blanc, soit **2 028 transcriptions**.
+
+| Condition | WER après corrections | WER ASR brut |
+| :-- | --: | --: |
+| Audio d’origine | 5.00 % | 4.62 % |
+| Bruit blanc ajouté · 20 dB SNR | 6.88 % | 6.47 % |
+| Bruit blanc ajouté · 10 dB SNR | 11.81 % | 11.41 % |
+
+Le WER est un taux d’erreur pondéré par les mots de référence : plus il est bas, mieux c’est. Le nombre de tests automatisés ne mesure pas cette précision.
+
+**Portée :** les locuteurs uniques, les microphones et les environnements d’origine ne sont pas documentés. Les bruits ajoutés sont des simulations. Cette campagne ne démontre pas encore la qualité sur plusieurs microphones physiques ni en bruit réel ; le protocole terrain reste à collecter.
+
+[Résultats et intervalles d’incertitude](benchmarks/results/fleurs-fr-test-2026-11-13.md) · [Rapport JSON et CSV](benchmarks/results) · [Reproduire la mesure](benchmarks/README.md) · [Protocole terrain](benchmarks/PROTOCOL.md)
+
 ## Documentation et code
 
 | Pour… | Ouvrir… |

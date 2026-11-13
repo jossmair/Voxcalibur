@@ -16,3 +16,5 @@ engine-bundle/
 
 /Installer-Voxcalibur-*.spec
 /Uninstall-Voxcalibur.spec
+
+/benchmarks/results/*.tmp

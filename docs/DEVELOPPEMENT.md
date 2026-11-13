@@ -70,3 +70,9 @@ Les essais compilés CPU/CUDA, l’interface et l’installation isolée sont do
 Le script `scripts/publish_github.ps1` utilise GitHub CLI et la version déclarée dans `app/__init__.py`. Il publie le code et une nouvelle version accompagnée des archives déjà construites. GitHub CLI doit être installé et connecté au compte autorisé.
 
 Le code est sous licence MIT. Les modèles et runtimes conservent leurs licences propres ; consultez `assets/licenses` et les fichiers de licences distribués avec les modèles.
+
+## Validation continue et précision
+
+Le [workflow Windows](CI.md) exécute les contrôles sur chaque push et pull request, pour Python 3.11 et 3.12. Il produit les rapports de tests et compile l’application. Les tests de métriques et de corpus font partie de cette suite ; le voyant vert ne représente pas un taux de précision acoustique.
+
+La [campagne de précision reproductible](../benchmarks/README.md) utilise un corpus public de parole humaine, des références figées et des métriques pondérées. Les tests sur microphones physiques et en bruit réel ont leur [protocole séparé](../benchmarks/PROTOCOL.md).

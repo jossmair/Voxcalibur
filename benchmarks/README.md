@@ -6,13 +6,17 @@ Les tests automatisés de l’application et la précision de reconnaissance son
 
 La première campagne utilise **tout le split de test français de Google FLEURS** : 676 enregistrements humains, environ 117 minutes. La révision du corpus et le SHA-256 du fichier source sont épinglés dans [le catalogue](corpora/fleurs-fr-test.json).
 
-Chaque enregistrement est évalué dans trois conditions : audio d’origine, bruit blanc gaussien ajouté à 20 dB SNR, bruit blanc ajouté à 10 dB SNR. Le bruit ajouté est une **simulation**, pas un enregistrement dans un bureau ou un café. Les références ne sont pas utilisées pour adapter le dictionnaire ou le modèle.
+Chaque enregistrement est évalué dans trois conditions : audio d’origine, bruit blanc gaussien ajouté à 20 dB SNR, bruit blanc ajouté à 10 dB SNR. Le bruit ajouté est une **simulation**, pas un enregistrement dans un bureau ou un café. Son SNR est calculé sur le signal entier, pauses comprises ; un gain commun limite les pics sans changer le rapport signal/bruit. Les références ne sont pas utilisées pour adapter le dictionnaire ou le modèle.
 
 Le catalogue FLEURS ne fournit pas d’identifiants de locuteur, de modèle de microphone ou de niveau de bruit d’origine pour ces lignes. Le nombre de voix uniques, la diversité des microphones et les environnements réels ne sont donc pas établis par cette campagne.
 
+## Résultats publiés
+
+[Consulter le rapport complet](results/fleurs-fr-test-2026-11-13.md), avec WER/CER, intervalles, configuration et fichiers détaillés. Le split de test complet représente 676 enregistrements et 332 phrases distinctes, soit environ 117 minutes uniques.
+
 ## Reproduire
 
-Depuis la racine du dépôt, avec les dépendances de l’application installées :
+Clonez le dépôt GitHub et utilisez le commit `source_commit` indiqué dans le rapport JSON pour reproduire une mesure publiée. Les archives de sources de la version 1.1.0 sont antérieures à ces outils de benchmark. Depuis la racine du dépôt, avec les dépendances de l’application installées :
 
 ```powershell
 .venv/Scripts/python.exe -m pip install -r requirements-benchmark.txt
@@ -31,7 +35,7 @@ Le rapport contient les références et hypothèses du corpus de test explicite.
 - WER pondéré par le nombre de mots de référence : somme des substitutions, suppressions et insertions divisée par le nombre total de mots.
 - WER de l’ASR brut et du texte après les corrections françaises par défaut, publiés séparément.
 - CER sur les mots normalisés joints par des espaces simples.
-- Normalisation NFC, casse Unicode ignorée et ponctuation séparatrice ; accents et différences chiffres/lettres conservés.
+- Normalisation NFC, casse Unicode ignorée et ponctuation séparatrice ; accents et différences chiffres/lettres conservés. La casse et la qualité de ponctuation ne sont donc pas mesurées.
 - Hypothèses vides comptées comme suppressions, jamais retirées du score.
 - Intervalle à 95 % par bootstrap déterministe. Rééchantillonnage par locuteur seulement si tous les identifiants sont connus ; sinon par enregistrement, sans interprétation comme intervalle sur de nouveaux locuteurs.
 - Temps d’inférence, temps de finalisation, facteur de temps réel, backend effectif, matériel, empreintes modèle/runtime/audio/code et révision du corpus.
