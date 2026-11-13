@@ -1,0 +1,11 @@
+{
+  "product": "Voxcalibur",
+  "version": "1.0.0",
+  "derived_from": "Transcrinator 1.3.17",
+  "tests_passed": 258,
+  "packaged_cpu_transcription": true,
+  "packaged_cuda_transcription": true,
+  "isolated_install_and_uninstall": true,
+  "github_published": false,
+  "github_blocker": "No usable Git credentials or repository-creation connector capability; browser access approval timed out."
+}

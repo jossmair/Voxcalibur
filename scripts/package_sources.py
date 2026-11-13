@@ -11,6 +11,7 @@ def source_files(root):
              and not f.is_relative_to(root / "docs/test-settings")]
     files += [root / name for name in (
         "README.md",
+        "Lancer Voxcalibur.cmd",
         "LICENSE",
         "pyproject.toml",
         "requirements-lock.txt",

@@ -38,3 +38,13 @@ Le code moteur et son intégration sont dans `app/engines`. Poids et binaires na
 Logo fourni, conservé dans `assets/voxcalibur-logo.png`. Icône Windows obtenue par redimensionnement proportionnel. Interface sombre, ambre et argent avec animations audio locales.
 
 Code MIT, dérivé de Transcrinator. Parakeet Ultra : Moondream/NVIDIA, CC BY 4.0 ; conversion GGUF Q8 par mudler. Silero VAD : MIT. Licences des modèles et runtimes, dont CUDA, incluses. Les symboles ABI historiques `transcrinator_*` sont conservés pour la compatibilité du moteur natif.
+
+## Validation de cette version
+
+258 tests automatisés réussis. Transcription réelle vérifiée depuis l'exécutable sur CPU et CUDA ; installation et désinstallation complètes vérifiées dans un profil isolé. Rapports dans `docs/validation`.
+
+![Interface Voxcalibur](docs/validation/home-premium.png)
+
+## Publication GitHub
+
+Le dépôt local est prêt. Une fois GitHub CLI installé et connecté avec `gh auth login`, exécuter `./scripts/publish_github.ps1`. Ce script crée un nouveau dépôt privé `jossmair/Voxcalibur`, publie les sources puis les trois archives et les empreintes dans la version `v1.0.0`. Il refuse de publier si ce nom de dépôt existe déjà.

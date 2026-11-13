@@ -8,6 +8,7 @@ Première version indépendante, issue de Transcrinator 1.3.17.
 - Profils, raccourcis et entrées Windows propres à Voxcalibur.
 - Versions installable et portable complètes, hors ligne.
 - 258 tests automatisés réussis.
+- Transcription réelle vérifiée avec l’exécutable embarqué sur CPU et CUDA.
 
 Portable : décompresser entièrement puis lancer Voxcalibur.exe.
 Installation : décompresser l'archive, garder les quatre fichiers ensemble et lancer Installer-Voxcalibur.exe.
