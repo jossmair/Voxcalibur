@@ -1,0 +1,26 @@
+{
+  "release": "https://github.com/jossmair/Voxcalibur/releases/tag/v1.1.0",
+  "tag": "v1.1.0",
+  "assets": [
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 294,
+      "digest": "sha256:e33ac00a51c4476fcb1ebac76cfc240e6089f5d69d4aec59d9cffb830f6eb0ee"
+    },
+    {
+      "name": "Voxcalibur-1.1.0-Installation.zip",
+      "bytes": 1893231872,
+      "digest": "sha256:23267e00bd514a0937057da2cd08e5a4634462bbac0337197e3060f7b81f1c61"
+    },
+    {
+      "name": "Voxcalibur-1.1.0-Portable.zip",
+      "bytes": 1869959066,
+      "digest": "sha256:19f6c25c7a84e4305e392ef3ab2c55d890024e0c5926e483c1b5977db1633bbe"
+    },
+    {
+      "name": "Voxcalibur-1.1.0-Sources.zip",
+      "bytes": 34227803,
+      "digest": "sha256:20842ebbb4c3f3c24d26c95d484e18565c9515b389078d86e66c79651656cc36"
+    }
+  ]
+}
