@@ -47,4 +47,4 @@ Code MIT, dérivé de Transcrinator. Parakeet Ultra : Moondream/NVIDIA, CC BY 4.
 
 ## Publication GitHub
 
-Le dépôt local est prêt. Une fois GitHub CLI installé et connecté avec `gh auth login`, exécuter `./scripts/publish_github.ps1`. Ce script crée un nouveau dépôt privé `jossmair/Voxcalibur`, publie les sources puis les trois archives et les empreintes dans la version `v1.0.0`. Il refuse de publier si ce nom de dépôt existe déjà.
+Le dépôt indépendant est disponible sur [jossmair/Voxcalibur](https://github.com/jossmair/Voxcalibur). Les versions Windows et les sources sont distribuées dans les [versions GitHub](https://github.com/jossmair/Voxcalibur/releases). Le dépôt est privé. Les archives de sources sont des instantanés du code lors de leur compilation ; les informations de publication peuvent ensuite être actualisées sur la branche principale.
