@@ -1,0 +1,8 @@
+{
+  "engine": "parakeet",
+  "acceleration": "cpu",
+  "success": true,
+  "backend": "cpu",
+  "final_events": 1,
+  "elapsed_seconds": 8.844000000000051
+}
