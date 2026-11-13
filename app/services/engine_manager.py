@@ -1,6 +1,7 @@
 import asyncio
 from functools import lru_cache
 import sys
+import json,time,hashlib
 
 from app.core.settings import bundle_root, directory
 from app.core.device_detector import run
@@ -62,6 +63,11 @@ def choose_backend(engine, acceleration, hw, probe=True):
         if not runtime_file(engine, "cpu"):
             raise RuntimeError("Runtime CPU absent. Restaurez le dossier runtimes fourni avec Voxcalibur.")
         return "cpu"
+    if acceleration=='auto' and runtime_file(engine,'cpu'):
+        try:
+            cached=json.loads((directory('cache')/'backend-fallback.json').read_text())
+            if time.time()-cached['time']<600 and cached['fingerprint']==backend_fingerprint(hw):return 'cpu'
+        except (OSError,ValueError,KeyError,TypeError):pass
     for backend in ("cuda", "vulkan"):
         binary = runtime_file(engine, backend)
         if not binary:
@@ -88,6 +94,15 @@ def choose_backend(engine, acceleration, hw, probe=True):
         f"ou un backend GPU compatible. Dossier vérifié : {directory('runtimes') / engine}"
     )
 
+def backend_fingerprint(hw):
+    runtimes=[]
+    for backend in ('cuda','vulkan'):
+        path=runtime_file('parakeet',backend)
+        if path:
+            info=path.stat();runtimes.append((str(path),info.st_size,info.st_mtime_ns))
+    hardware=[{key:gpu.get(key) for key in ('name','vendor','cuda_capability','vram_mb')} for gpu in hw.gpus]
+    return hashlib.sha256(json.dumps([hardware,runtimes],sort_keys=True).encode()).hexdigest()
+
 
 class EngineManager:
     def __init__(self, hardware):
@@ -100,6 +115,7 @@ class EngineManager:
     def settings_signature(settings):
         return (
             settings.engine,
+            settings.language,
             settings.acceleration,
             settings.silence_ms,
             settings.vad_threshold,
@@ -166,6 +182,8 @@ class EngineManager:
                 await self.close()
                 raise
             self.fallback_reason = "GPU indisponible au chargement : CPU actif."
+            try:(directory('cache')/'backend-fallback.json').write_text(json.dumps(dict(time=time.time(),fingerprint=backend_fingerprint(self.hardware))))
+            except OSError:pass
         except BaseException:
             await self.close()
             raise
@@ -173,7 +191,11 @@ class EngineManager:
         return self.active
 
     async def close(self):
-        if self.active:
-            await self.active.close()
-        self.active = None
+        active,self.active=self.active,None
         self.signature = None
+        if active:
+            try:await active.close()
+            except (OSError,ValueError,RuntimeError):
+                # A failed native worker may already have closed its handles.
+                # Keep the controller usable so auto fallback/retry can proceed.
+                pass

@@ -254,8 +254,8 @@ class VoiceOrb(QWidget):
         self.timer.timeout.connect(self.animate)
 
     def update_timer(self):
-        if self.isVisible() and (self.listening or self.ambient):
-            self.timer.start(16 if self.listening else 40)
+        if self.isVisible() and self.listening:
+            self.timer.start(50)
         else:
             self.timer.stop()
 

@@ -46,7 +46,7 @@ class Controller(QObject):
         self.capture = None
         self.session_pending = False
         self.blocked = False
-        self.thread = threading.Thread(target=self._thread, name="voxcalibur-controller", daemon=True)
+        self.thread = threading.Thread(target=self._thread, name="transcri-controller", daemon=True)
 
     def start(self):
         self.thread.start()
@@ -122,6 +122,11 @@ class Controller(QObject):
         return engine
 
     async def _run(self):
+        if getattr(self.hardware,'pending_detection',False):
+            from app.core.device_detector import detect
+            self.status.emit('Préparation de la dictée…')
+            try:self.hardware=await asyncio.to_thread(detect)
+            except Exception:self.hardware.pending_detection=False
         self.manager = EngineManager(self.hardware)
         try:
             self.focus = (None if self.settings.insertion_strategy in ("auto", "clipboard")
@@ -152,6 +157,8 @@ class Controller(QObject):
                     break
                 if kind == "configure":
                     self.settings = replace(value)
+                    self.text_processor = TextPostprocessor(self.settings.vocabulary, self.settings.number_style,
+                                                            self.settings.abbreviate_units)
                     await self._prepare()
                     await self._update_recognition_vocabulary()
                 elif kind == "load":
@@ -323,7 +330,9 @@ class Controller(QObject):
     def _finalize_text(self):
         if self.ledger.finalized:
             return
-        text = self.text_processor.apply("".join(self.ledger.pending))
+        text = "".join(self.ledger.pending)
+        if self.settings.language == "fr-FR":
+            text = self.text_processor.apply(text)
         self.ledger.pending[:] = [text] if text else []
         self.ledger.confirmed[:] = [text] if text else []
         self.ledger.finalized = True

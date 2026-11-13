@@ -72,7 +72,7 @@ def main():
     if translator.load(str(translation)):
         application.installTranslator(translator)
     application.setQuitOnLastWindowClosed(False)
-    server_name = "Voxcalibur-" + hashlib.sha256(str(data_root().resolve()).lower().encode()).hexdigest()[:24]
+    server_name = "Transcri-" + hashlib.sha256(str(data_root().resolve()).lower().encode()).hexdigest()[:24]
 
     def send_command(command):
         connection = QLocalSocket()
@@ -109,7 +109,8 @@ def main():
             settings.save()
         except OSError:
             pass
-    hardware = detect()
+    # The shell must appear before GPU/system subprocesses finish probing.
+    hardware = detect(quick=True)
     controller = Controller(settings, hardware)
     hub = FloatingHub(settings)
     window = MainWindow(controller)
@@ -118,7 +119,7 @@ def main():
         window.showNormal()
         window.raise_()
         window.activateWindow()
-    icon = QIcon(str(asset("voxcalibur.svg")))
+    icon = QIcon(str(asset("voxcalibur.ico")))
     application.setWindowIcon(icon)
     tray = QSystemTrayIcon(icon, application)
     tray.setToolTip(f"Voxcalibur — {trigger_spec(settings.trigger_key)[1]} pour dicter")
@@ -146,7 +147,7 @@ def main():
         def poll():
             if not controller.thread.is_alive():
                 server.close()
-                tray.hide()
+                tray.show()
                 lock.unlock()
                 application.quit()
             else:

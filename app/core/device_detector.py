@@ -32,10 +32,14 @@ class Hardware:
         return asdict(self)
 
 
-def detect():
+def detect(quick=False):
     memory = psutil.virtual_memory()
     hw = Hardware(platform.processor(), psutil.cpu_count(logical=False) or 1, memory.total, memory.available)
     system = Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32"
+    hw.vulkan_loader = (system / "vulkan-1.dll").exists()
+    if quick:
+        hw.pending_detection=True
+        return hw
     smi = shutil.which("nvidia-smi") or str(system / "nvidia-smi.exe")
     result = run(
         [smi, "--query-gpu=name,memory.total,memory.free,compute_cap", "--format=csv,noheader,nounits"]

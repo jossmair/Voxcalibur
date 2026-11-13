@@ -26,7 +26,7 @@ def injection_worker(connection, hwnd, pid, legacy_source=None, legacy_working_s
             from app.engines.base import Transcript
             if legacy_source:
                 import importlib.util
-                spec = importlib.util.spec_from_file_location("voxcalibur_legacy_injector", legacy_source)
+                spec = importlib.util.spec_from_file_location("transcrinator_legacy_injector", legacy_source)
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
                 if legacy_working_shortcut:

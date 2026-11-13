@@ -82,8 +82,8 @@ def test_simple_ui_and_retained_text_recovery(tmp_path, monkeypatch):
     hardware = Hardware("test", 4, 16 * 2**30, 8 * 2**30)
     controller = Controller(settings, hardware)
     window = MainWindow(controller)
-    assert window.findChildren(QComboBox) == [window.trigger_key]
-    assert window.findChildren(QCheckBox) == [window.number_style, window.units, window.startup]
+    assert window.findChildren(QComboBox) == [window.trigger_key, window.language]
+    assert window.findChildren(QCheckBox) == [window.number_style, window.units, window.startup, window.gpu]
     assert not window.findChildren(QTabWidget)
     assert window.testAttribute(Qt.WA_TranslucentBackground)
     assert not any("Retour" in button.text() for button in window.findChildren(QPushButton))

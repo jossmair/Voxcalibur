@@ -15,7 +15,7 @@ def set_autostart(enabled):
                 command = [sys.executable]
             else:
                 pythonw = Path(sys.executable).with_name("pythonw.exe")
-                launcher = Path(__file__).resolve().parents[2] / "scripts" / "run_voxcalibur.py"
+                launcher = Path(__file__).resolve().parents[2] / "scripts" / "run_transcri.py"
                 command = [str(pythonw), str(launcher)]
             command += ["--minimized"]
             winreg.SetValueEx(key, "Voxcalibur", 0, winreg.REG_SZ, subprocess.list2cmdline(command))

@@ -1,6 +1,6 @@
 """One screen with compact amber preferences and no transcript panel."""
 from dataclasses import replace
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtWidgets import (
     QFrame, QGridLayout, QHBoxLayout, QMainWindow,
     QScrollArea, QVBoxLayout, QWidget,
@@ -10,7 +10,9 @@ from app.core import autostart
 from app.core.hotkeys import TRIGGER_KEYS, trigger_spec
 from app.ui.premium import Chrome, HeroArtwork, HudShell, VoiceOrb, label
 from app.ui.preferences import DictionaryButton, PreferencesCard, Toggle
+from app.core.languages import LANGUAGES
 from app.ui.key_picker import TriggerChoiceBox
+from app.ui.language_picker import LanguageChoiceBox
 from app.ui.caption_button import CaptionButton
 from app.ui.vocabulary_dialog import VocabularyDialog
 
@@ -29,7 +31,7 @@ class MainWindow(QMainWindow):
         self.setAutoFillBackground(False)
         self.setMinimumSize(600, 480)
         area = self.screen().availableGeometry()
-        self.resize(min(760, area.width() - 32), min(600, area.height() - 32))
+        self.resize(min(760, area.width() - 32), min(720, area.height() - 32))
 
         shell = HudShell()
         outer = QVBoxLayout(shell)
@@ -39,7 +41,6 @@ class MainWindow(QMainWindow):
         bar = QHBoxLayout(chrome)
         bar.setContentsMargins(24, 16, 18, 10)
         bar.addWidget(label("VOXCALIBUR", "Brand"))
-        bar.addWidget(label("DICTÉE LOCALE", "QuietBadge"))
         bar.addStretch()
         self.caption_buttons = []
         for close, action in ((False, self.showMinimized), (True, self.hide)):
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
         hero_layout = QVBoxLayout(hero)
         hero_layout.setContentsMargins(0, 6, 0, 6)
         hero_layout.addStretch()
-        headline = label('Votre voix.<br><span style="color:#ffad63">Votre pouvoir.</span>', "HeroTitle")
+        headline = label('Dictée<br><span style="color:#ffad63">Locale</span>', "HeroTitle")
         headline.setMaximumWidth(330)
         hero_layout.addWidget(headline)
         hero_layout.addStretch()
@@ -145,6 +146,30 @@ class MainWindow(QMainWindow):
         self.startup.setChecked(self.preferences.autostart)
         self.startup.toggled.connect(self.save_startup)
         grid.addWidget(toggle_tile("Démarrage Windows", "À l’ouverture de session", self.startup), 1, 1)
+        tile, box = selector("LANGUE DE DICTÉE")
+        self.language = LanguageChoiceBox()
+        self.language.setAccessibleName("Langue de dictée")
+        for code, name in LANGUAGES:
+            self.language.addItem(name, code)
+        self.language.setCurrentIndex(max(0, self.language.findData(self.preferences.language)))
+        self.language.currentIndexChanged.connect(self.save_engine_options)
+        box.addWidget(self.language)
+        hint = label("Reconnaissance automatique par Parakeet", "PreferenceHint")
+        hint.setToolTip("Le modèle Ultra détecte la langue dans l’audio ; ce choix ne force pas son décodage.")
+        self.language.setToolTip(hint.toolTip())
+        hint.deleteLater()
+        grid.addWidget(tile, 2, 0)
+        self.gpu = Toggle("Booster avec la carte graphique")
+        self.gpu.setChecked(self.preferences.acceleration != "cpu")
+        self.gpu.toggled.connect(self.save_engine_options)
+        self.gpu_hint = label("", "PreferenceHint")
+        self.gpu_hint.hide()
+        grid.addWidget(toggle_tile("Booster avec la carte graphique", self.gpu_hint, self.gpu), 2, 1)
+        self.hardware_timer = QTimer(self)
+        self.hardware_timer.setInterval(300)
+        self.hardware_timer.timeout.connect(self.refresh_gpu)
+        self.hardware_timer.start()
+        self.refresh_gpu()
         card.addLayout(grid)
         layout.addWidget(self.preferences_panel)
         layout.addStretch()
@@ -156,6 +181,42 @@ class MainWindow(QMainWindow):
         controller.status.connect(self.hero.core.set_state)
         controller.level.connect(self.orb.set_level)
         controller.level.connect(self.hero.core.set_level)
+
+    def refresh_gpu(self):
+        hardware = self.controller.hardware
+        if getattr(hardware, "pending_detection", False):
+            self.gpu.setEnabled(False)
+            return
+        from app.services.engine_manager import choose_backend
+        try:
+            compatible = bool(hardware.gpus) and choose_backend("parakeet", "gpu", hardware, probe=False) != "cpu"
+        except RuntimeError:
+            compatible = False
+        self.gpu.blockSignals(True)
+        self.gpu.setChecked(compatible and self.preferences.acceleration != "cpu")
+        self.gpu.blockSignals(False)
+        self.gpu.setEnabled(compatible)
+        self.gpu_hint.setText("")
+        self.gpu.setToolTip("Utilise CUDA ou Vulkan si compatible, sinon le processeur.")
+        self.hardware_timer.stop()
+
+    def save_engine_options(self, *_):
+        candidate = replace(self.preferences, language=self.language.currentData(),
+                            acceleration="auto" if self.gpu.isChecked() else "cpu")
+        try:
+            candidate.save()
+        except OSError:
+            for control, value in ((self.language, self.language.findData(self.preferences.language)),):
+                control.blockSignals(True)
+                control.setCurrentIndex(value)
+                control.blockSignals(False)
+            self.gpu.blockSignals(True)
+            self.gpu.setChecked(self.preferences.acceleration != "cpu" and self.gpu.isEnabled())
+            self.gpu.blockSignals(False)
+            self.show_error("Les réglages n’ont pas pu être enregistrés.")
+            return
+        self.preferences = candidate
+        self.controller.request("configure", replace(candidate))
 
     def set_state(self, state):
         self.state_name = state

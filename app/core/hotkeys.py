@@ -97,7 +97,7 @@ class GlobalHotkey:
             return fired, consume
 
     def start(self):
-        self.thread = threading.Thread(target=self._run, name="voxcalibur-hotkey", daemon=True)
+        self.thread = threading.Thread(target=self._run, name="transcri-hotkey", daemon=True)
         self.thread.start()
         if not self.ready.wait(3) or self.error is not None:
             raise RuntimeError("Le raccourci Windows n’a pas pu être installé.")

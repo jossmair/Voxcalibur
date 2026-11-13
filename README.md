@@ -1,22 +1,26 @@
-# Voxcalibur 1.0.0
+# Voxcalibur 1.1.0
 
-**La parole est votre pouvoir.** Dictée vocale locale pour Windows 10/11 x64, issue de Transcrinator 1.3.17.
+**La parole est votre pouvoir.** Dictée vocale locale pour Windows 10/11 x64, issue de la version actuelle de Transcrinator dans la suite Ergonatus (base 1.3.17 enrichie).
 
 Application indépendante, sans lanceur ni service Ergonatus. Les versions complètes incluent Parakeet Ultra, Silero VAD et les runtimes CPU, Vulkan et CUDA. Aucun compte, clé API ou téléchargement au premier lancement.
 
 ## Portable
 
-Décompressez entièrement `Voxcalibur-1.0.0-Portable.zip`, puis lancez `Voxcalibur.exe`. Gardez `_internal`, `models` et `runtimes` avec l'exécutable. Aucun démarrage Windows n'est ajouté par le simple lancement portable.
+Décompressez entièrement `Voxcalibur-1.1.0-Portable.zip`, puis lancez `Voxcalibur.exe`. Gardez `_internal`, `models` et `runtimes` avec l'exécutable. Aucun démarrage Windows n'est ajouté par le simple lancement portable.
 
 ## Installation
 
-Décompressez `Voxcalibur-1.0.0-Installation.zip` et lancez `Installer-Voxcalibur.exe`. Conservez `payload.zip`, `payload.json` et `uninstaller.exe` à côté. Installation par utilisateur sans administrateur ; désinstallation depuis les applications Windows.
+Décompressez `Voxcalibur-1.1.0-Installation.zip` et lancez `Installer-Voxcalibur.exe`. Conservez `payload.zip`, `payload.json` et `uninstaller.exe` à côté. Installation par utilisateur sans administrateur ; désinstallation depuis les applications Windows.
 
 ## Utilisation
 
 Placez le curseur dans votre application. Appuyez puis relâchez **Maj gauche**, parlez, puis appuyez de nouveau pour terminer. Le texte complet est copié et collé dans le focus Windows courant. Le menu près de l'horloge permet d'ouvrir Voxcalibur, de récupérer le texte conservé et de quitter. Le microphone reste fermé hors dictée.
 
-Préférences : touche, nombres en chiffres, unités abrégées, démarrage Windows et dictionnaire personnel. Accélération compatible automatique, avec repli CPU.
+Préférences : touche, langue de dictée avec recherche, activation GPU, nombres en chiffres, unités abrégées, démarrage Windows et dictionnaire personnel. Les choix langue/CPU/GPU sont conservés. Détection matérielle en arrière-plan et repli CPU après échec GPU.
+
+Parakeet Ultra détecte la langue de l’audio ; le choix de langue ne force pas son décodeur. Les corrections de nombres, unités et dictionnaire françaises sont réservées au choix Français.
+
+Les différences reprises de la suite sont détaillées dans `docs/RELEASE-1.1.0.md` et leur provenance vérifiée dans `docs/validation/suite-feature-parity-110.json`.
 
 Dossiers propres : `%LOCALAPPDATA%/Voxcalibur` et `%LOCALAPPDATA%/Programs/Voxcalibur`. Raccourci, verrou et entrées Windows indépendants. Le profil Transcrinator et la suite sont préservés. La version portable conserve également ses préférences dans le profil utilisateur.
 
@@ -41,7 +45,7 @@ Code MIT, dérivé de Transcrinator. Parakeet Ultra : Moondream/NVIDIA, CC BY 4.
 
 ## Validation de cette version
 
-258 tests automatisés réussis. Transcription réelle vérifiée depuis l'exécutable sur CPU et CUDA ; installation et désinstallation complètes vérifiées dans un profil isolé. Rapports dans `docs/validation`.
+267 tests automatisés réussis. Transcription réelle vérifiée depuis l'exécutable sur CPU et CUDA ; installation et désinstallation complètes vérifiées dans un profil isolé. Rapports dans `docs/validation`.
 
 ![Interface Voxcalibur](docs/validation/home-premium.png)
 

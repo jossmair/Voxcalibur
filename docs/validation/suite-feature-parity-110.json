@@ -1,0 +1,40 @@
+{
+  "product": "Voxcalibur",
+  "version": "1.1.0",
+  "source": "Ergonatus/Transcrinator/source",
+  "source_version": "1.3.17 with current suite enhancements",
+  "ported_features": [
+    "Sélecteur de langue avec recherche et navigation clavier",
+    "Conservation de la langue et du choix CPU/GPU au redémarrage",
+    "Interrupteur GPU avec détection de compatibilité",
+    "Affichage immédiat et détection matérielle en arrière-plan",
+    "Cache temporaire du repli CPU après échec GPU",
+    "Fermeture native tolérante aux handles déjà fermés",
+    "Post-traitement français réservé au français",
+    "Reconfiguration du moteur et du correcteur après changement de langue",
+    "Arrêt des animations décoratives inutiles au repos"
+  ],
+  "verified_modules": {
+    "core/controller.py": {
+      "source_sha256": "519148df03e3feac54f7e30142bd47238cfe06549cc892661f2a2d7e84ce3d2e",
+      "normalized_match": true
+    },
+    "core/device_detector.py": {
+      "source_sha256": "2d47c4af926751134c40850e7697e8c36cb623d3668dbb252dafc51ccec81c4d",
+      "normalized_match": true
+    },
+    "core/languages.py": {
+      "source_sha256": "c025cc02a7f940fc34e9575979749f596960e80c882ba5f59a275136028c480e",
+      "normalized_match": true
+    },
+    "services/engine_manager.py": {
+      "source_sha256": "581bfc3d6a73724c21c20366f019693bf8c24e0e1a2e55b840a5122de3d510a3",
+      "normalized_match": true
+    }
+  },
+  "standalone_adaptations": [
+    "Voxcalibur branding and independent user profile",
+    "Bundled models/runtimes without suite discovery",
+    "Independent tray and orb; no shared suite theme or grouped-orb controller"
+  ]
+}

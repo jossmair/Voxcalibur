@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "voxcalibur"
-version = "1.0.0"
+version = "1.1.0"
 description = "Dictée locale Windows en français"
 requires-python = ">=3.11"
 dependencies = ["PySide6-Essentials>=6.8,<7", "sounddevice>=0.5,<1", "numpy>=2,<3", "soxr>=0.5,<2", "pywin32>=308; sys_platform=='win32'", "comtypes>=1.4,<2", "httpx>=0.28,<1", "onnxruntime>=1.20,<2", "psutil>=6,<8", "text2num==3.0.0", "num2words==0.5.14"]

@@ -63,7 +63,9 @@ class Settings:
     def configure_automatic(self) -> bool:
         """The consumer application has one supported, fully automatic path."""
         first_launch = not self.setup_done or self.experience_revision < 7
-        self.engine, self.acceleration, self.language = "parakeet", "auto", "fr-FR"
+        self.engine = "parakeet"
+        if self.acceleration != "cpu":
+            self.acceleration = "auto"
         self.microphone, self.hotkey, self.insertion_strategy = None, "single", "auto"
         self.progressive, self.punctuation = False, True
         self.notifications = False
@@ -82,7 +84,9 @@ class Settings:
     def configure_turnkey(self) -> bool:
         if self.turnkey_configured or not (bundle_root() / "bundle.json").is_file():
             return False
-        self.engine, self.acceleration, self.language = "parakeet", "auto", "fr-FR"
+        self.engine = "parakeet"
+        if self.acceleration != "cpu":
+            self.acceleration = "auto"
         self.microphone, self.hotkey, self.insertion_strategy = None, "single", "auto"
         self.progressive = True
         self.experience_revision = 3
@@ -123,7 +127,10 @@ class Settings:
                 candidate = (tuple(candidate) if isinstance(candidate, (list, tuple)) and len(candidate) == 2
                              and all(type(n) is int for n in candidate) else None)
             setattr(result, item.name, candidate)
-        result.engine, result.language = "parakeet", "fr-FR"
+        result.engine = "parakeet"
+        from app.core.languages import LANGUAGE_CODES
+        if result.language not in LANGUAGE_CODES:
+            result.language = "fr-FR"
         if result.acceleration not in {"auto", "cpu", "gpu"}:
             result.acceleration = "auto"
         from app.core.text_options import normalize_vocabulary

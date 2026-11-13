@@ -19,7 +19,7 @@ from tkinter import messagebox, ttk
 import winreg
 
 REGISTRY = r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Voxcalibur"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 RUN_REGISTRY = r"Software\Microsoft\Windows\CurrentVersion\Run"
 UNINSTALL_VALUES = ("DisplayName", "DisplayVersion", "Publisher", "InstallLocation", "DisplayIcon", "UninstallString")
 
