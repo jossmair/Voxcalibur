@@ -1,9 +1,8 @@
-"""Explicit local corpus evaluation; never logs text from normal dictation."""
+"""Legacy three-phrase smoke test. For accuracy campaigns use scripts.evaluate_corpus."""
 
 import argparse
 import asyncio
 import json
-import re
 import time
 import wave
 from pathlib import Path
@@ -18,17 +17,9 @@ from app.services.engine_manager import EngineManager
 
 
 def wer(reference, hypothesis):
-    def tokens(text):
-        return re.findall(r"\w+", text.casefold())
-
-    a, b = tokens(reference), tokens(hypothesis)
-    row = list(range(len(b) + 1))
-    for i, x in enumerate(a, 1):
-        current = [i]
-        for j, y in enumerate(b, 1):
-            current.append(min(current[-1] + 1, row[j] + 1, row[j - 1] + (x != y)))
-        row = current
-    return row[-1] / max(1, len(a))
+    from scripts.benchmark_metrics import score
+    result = score(reference, hypothesis)
+    return result["word_errors"] / max(1, result["reference_words"])
 
 
 def make_corpus(destination):
@@ -63,6 +54,8 @@ async def evaluate(args):
         "acceleration": args.acceleration,
         "corpus": "synthetic SAPI French" if args.synthesize else "user supplied WAV",
         "validated": False,
+        "accuracy_campaign": False,
+        "scope": "legacy three-phrase smoke test",
         "cases": [],
     }
     corpus = (
@@ -124,7 +117,7 @@ async def evaluate(args):
                     "peak_process_tree_ram_mb": peak_ram / 2**20,
                 }
             )
-        results["validated"] = all(c["hypothesis"] for c in results["cases"])
+        results["validated"] = bool(results["cases"]) and all(c["hypothesis"] for c in results["cases"])
     except Exception as error:
         results["error"] = str(error)
         raise

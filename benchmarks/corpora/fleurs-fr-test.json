@@ -1,0 +1,15 @@
+{
+  "dataset": "google/fleurs",
+  "config": "fr_fr",
+  "split": "test",
+  "revision": "168de341b3db6859a9bac1c50a2ef5e3b47647e0",
+  "file": "fr_fr/test/0000.parquet",
+  "bytes": 445464011,
+  "sha256": "99a08ff00edbc7b6f040e23b33e49bc4a1fce38f364d50c603227d612fd797ef",
+  "source_url": "https://huggingface.co/datasets/google/fleurs",
+  "license": "CC-BY-4.0",
+  "speech_origin": "human",
+  "microphone": "unknown",
+  "environment": "unknown",
+  "speaker_id_available": false
+}

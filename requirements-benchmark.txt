@@ -1,0 +1,2 @@
+# Optional corpus extraction; runtime requirements remain in requirements-lock.txt.
+pyarrow==26.0.1

@@ -4,7 +4,7 @@ from app import __version__
 
 
 def source_files(root):
-    items = [root / name for name in ("app", "assets", "docs", "tests", "scripts", "installer")]
+    items = [root / name for name in ("app", "assets", "docs", "tests", "scripts", "installer", "benchmarks", ".github")]
     # Disposable profiles may contain local preferences. Never distribute them.
     files = [f for folder in items for f in folder.rglob("*")
              if f.is_file() and "__pycache__" not in f.parts
@@ -15,6 +15,7 @@ def source_files(root):
         "LICENSE",
         "pyproject.toml",
         "requirements-lock.txt",
+        "requirements-benchmark.txt",
         "Voxcalibur.spec",
         ".gitignore",
         ".gitattributes",
