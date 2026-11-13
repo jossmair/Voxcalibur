@@ -1,54 +1,135 @@
-# Voxcalibur 1.1.0
+<div align="center">
 
-**La parole est votre pouvoir.** Dictée vocale locale pour Windows 10/11 x64, issue de la version actuelle de Transcrinator dans la suite Ergonatus (base 1.3.17 enrichie).
+<img src="assets/voxcalibur-logo.png" width="340" alt="Voxcalibur — La parole est votre pouvoir.">
 
-Application indépendante, sans lanceur ni service Ergonatus. Les versions complètes incluent Parakeet Ultra, Silero VAD et les runtimes CPU, Vulkan et CUDA. Aucun compte, clé API ou téléchargement au premier lancement.
+# La parole est votre pouvoir.
 
-## Portable
+**La dictée vocale locale pour Windows, prête à l’emploi.**
 
-Décompressez entièrement `Voxcalibur-1.1.0-Portable.zip`, puis lancez `Voxcalibur.exe`. Gardez `_internal`, `models` et `runtimes` avec l'exécutable. Aucun démarrage Windows n'est ajouté par le simple lancement portable.
+Parlez. Retrouvez vos mots dans votre application.<br>Le moteur et les modèles sont déjà inclus.
 
-## Installation
+<img src="docs/media/platform.svg" width="800" alt="Windows 10/11 x64 · Hors ligne · Moteur inclus · Version 1.1.0">
 
-Décompressez `Voxcalibur-1.1.0-Installation.zip` et lancez `Installer-Voxcalibur.exe`. Conservez `payload.zip`, `payload.json` et `uninstaller.exe` à côté. Installation par utilisateur sans administrateur ; désinstallation depuis les applications Windows.
+<br>
 
-## Utilisation
+<a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip"><img src="docs/media/download-installer.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version installable, 1,89 Go"></a> <a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip"><img src="docs/media/download-portable.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version portable, 1,87 Go"></a>
 
-Placez le curseur dans votre application. Appuyez puis relâchez **Maj gauche**, parlez, puis appuyez de nouveau pour terminer. Le texte complet est copié et collé dans le focus Windows courant. Le menu près de l'horloge permet d'ouvrir Voxcalibur, de récupérer le texte conservé et de quitter. Le microphone reste fermé hors dictée.
+[Voir la version 1.1.0](https://github.com/jossmair/Voxcalibur/releases/tag/v1.1.0) · [Guide d’utilisation](docs/UTILISATION.md) · [Nouveautés](docs/RELEASE-1.1.0.md)
 
-Préférences : touche, langue de dictée avec recherche, activation GPU, nombres en chiffres, unités abrégées, démarrage Windows et dictionnaire personnel. Les choix langue/CPU/GPU sont conservés. Détection matérielle en arrière-plan et repli CPU après échec GPU.
+</div>
 
-Parakeet Ultra détecte la langue de l’audio ; le choix de langue ne force pas son décodeur. Les corrections de nombres, unités et dictionnaire françaises sont réservées au choix Français.
+---
 
-Les différences reprises de la suite sont détaillées dans `docs/RELEASE-1.1.0.md` et leur provenance vérifiée dans `docs/validation/suite-feature-parity-110.json`.
+## Vos idées, directement à l’écran
 
-Dossiers propres : `%LOCALAPPDATA%/Voxcalibur` et `%LOCALAPPDATA%/Programs/Voxcalibur`. Raccourci, verrou et entrées Windows indépendants. Le profil Transcrinator et la suite sont préservés. La version portable conserve également ses préférences dans le profil utilisateur.
+Placez le curseur là où vous voulez écrire, puis utilisez votre touche de dictée. Voxcalibur transforme votre voix en texte et le colle dans la fenêtre active.
 
-## Développement
+<p align="center">
+  <img src="docs/media/interface.png" width="820" alt="Interface réelle de Voxcalibur 1.1.0 : Dictée Locale, dictionnaire, raccourci, nombres, unités, démarrage, langue et accélération GPU.">
+</p>
 
-Python 3.11+, dépendances dans `requirements-lock.txt`. `scripts/build.ps1` lance les tests, compile, vérifie et ajoute les modèles et runtimes, puis produit les distributions. Les modèles réels et runtimes doivent être disponibles via `VOXCALIBUR_BUNDLE` avant compilation. `VOXCALIBUR_DATA` isole le profil de développement.
+<p align="center"><sub>Une seule fenêtre. Vos réglages à portée de main. Un petit orbe pour suivre la dictée.</sub></p>
 
-```powershell
-python -m venv .venv
-.venv/Scripts/python.exe -m pip install -r requirements-lock.txt
-.venv/Scripts/python.exe -m pytest -q
-./scripts/build.ps1
-```
+## Un moteur local. Des réglages utiles.
 
-Le code moteur et son intégration sont dans `app/engines`. Poids et binaires natifs volumineux sont distribués en archives hors historique Git. `bundle.json` référence les modèles et leurs empreintes ; `SHA256SUMS.txt` permet de vérifier les archives.
+<table>
+<tr>
+<td width="33%" valign="top">
+<h3>Sur votre ordinateur</h3>
+<p>Reconnaissance vocale avec <strong>Parakeet Ultra</strong> et détection de parole Silero. Les distributions complètes fonctionnent <strong>hors ligne</strong>.</p>
+</td>
+<td width="33%" valign="top">
+<h3>CPU ou carte graphique</h3>
+<p>Activez le GPU compatible <strong>CUDA ou Vulkan</strong>. Le processeur prend le relais si le chargement accéléré échoue.</p>
+</td>
+<td width="33%" valign="top">
+<h3>À votre façon</h3>
+<p>Choisissez votre touche, votre langue et vos préférences. <strong>Vos réglages sont conservés</strong> au prochain lancement.</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<h3>Un dictionnaire personnel</h3>
+<p>Ajoutez vos noms propres, villes, produits et termes techniques, avec leurs erreurs habituelles à corriger.</p>
+</td>
+<td valign="top">
+<h3>Des nombres bien écrits</h3>
+<p>En français, choisissez les <strong>chiffres ou les lettres</strong> et l’abréviation des unités : « 250 grammes » devient « 250 g ».</p>
+</td>
+<td valign="top">
+<h3>Une présence discrète</h3>
+<p>Un orbe indique l’activité et donne accès au menu. Le <strong>microphone reste fermé hors dictée</strong>.</p>
+</td>
+</tr>
+</table>
 
-## Identité et licences
+## Trois gestes pour écrire
 
-Logo fourni, conservé dans `assets/voxcalibur-logo.png`. Icône Windows obtenue par redimensionnement proportionnel. Interface sombre, ambre et argent avec animations audio locales.
+<img src="docs/media/how-it-works.svg" width="1152" alt="1. Appuyez puis relâchez Maj gauche. 2. Parlez. 3. Appuyez à nouveau sur Maj gauche : votre texte est collé au curseur.">
 
-Code MIT, dérivé de Transcrinator. Parakeet Ultra : Moondream/NVIDIA, CC BY 4.0 ; conversion GGUF Q8 par mudler. Silero VAD : MIT. Licences des modèles et runtimes, dont CUDA, incluses. Les symboles ABI historiques `transcrinator_*` sont conservés pour la compatibilité du moteur natif.
+**Maj gauche est la touche par défaut.** Vous pouvez la remplacer dans les préférences. Le texte est aussi disponible dans le presse-papiers et le menu permet de récupérer le texte conservé.
 
-## Validation de cette version
+## Choisissez votre version
 
-267 tests automatisés réussis. Transcription réelle vérifiée depuis l'exécutable sur CPU et CUDA ; installation et désinstallation complètes vérifiées dans un profil isolé. Rapports dans `docs/validation`.
+| | **Installable** | **Portable** |
+| :-- | :-- | :-- |
+| Pour quel usage ? | Installer Voxcalibur sur votre PC | Le lancer depuis un dossier décompressé |
+| Premier lancement | `Installer-Voxcalibur.exe` | `Voxcalibur.exe` |
+| Moteur et modèles | Inclus | Inclus |
+| Suite Ergonatus requise | Non | Non |
+| Taille de l’archive | 1,89 Go | 1,87 Go |
+| Téléchargement | [**Version installable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip) | [**Version portable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip) |
 
-![Interface Voxcalibur](docs/validation/home-premium.png)
+**Décompressez entièrement l’archive avant de lancer le logiciel.** Pour l’installation, gardez les quatre fichiers ensemble. Pour la version portable, conservez les dossiers `_internal`, `models` et `runtimes` avec l’exécutable. Les préférences restent dans votre profil Windows dans les deux éditions.
 
-## Publication GitHub
+**Configuration :** Windows 10/11 x64, microphone autorisé dans Windows ; 16 Go de RAM conseillés. Python n’est pas nécessaire pour les versions compilées.
 
-Le dépôt indépendant est disponible sur [jossmair/Voxcalibur](https://github.com/jossmair/Voxcalibur). Les versions Windows et les sources sont distribuées dans les [versions GitHub](https://github.com/jossmair/Voxcalibur/releases). Le dépôt est privé. Les archives de sources sont des instantanés du code lors de leur compilation ; les informations de publication peuvent ensuite être actualisées sur la branche principale.
+<details>
+<summary><strong>Voir le dictionnaire et les langues</strong></summary>
+
+### Votre vocabulaire, au même endroit
+
+<img src="docs/media/dictionary.png" width="860" alt="Dictionnaire personnel Voxcalibur : noms, variantes et catégories.">
+
+### Une langue facile à retrouver
+
+<img src="docs/media/languages.png" width="320" alt="Palette Voxcalibur avec recherche et liste des langues disponibles.">
+
+La palette de langues propose une recherche et une navigation au clavier. Parakeet Ultra détecte la langue à partir de l’audio : le sélecteur ne force pas son décodeur. Les corrections françaises sont appliquées lorsque **Français** est sélectionné.
+
+[Consulter le guide détaillé](docs/UTILISATION.md)
+
+</details>
+
+## Une version vérifiée
+
+<img src="docs/media/validation.svg" width="1152" alt="Version 1.1.0 : 267 tests automatisés réussis, transcription réelle CPU/CUDA et installation/désinstallation vérifiées.">
+
+Ces contrôles portent sur la **version 1.1.0**. La précision dépend de la voix, du bruit ambiant et des mots prononcés. Les essais de transcription réels ont été effectués sur CPU et CUDA ; Vulkan est inclus et sélectionné sur les configurations compatibles.
+
+[Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
+
+## Documentation et code
+
+| Pour… | Ouvrir… |
+| :-- | :-- |
+| Installer, dicter et régler Voxcalibur | [Le guide d’utilisation](docs/UTILISATION.md) |
+| Découvrir les changements de la 1.1.0 | [Les notes de version](docs/RELEASE-1.1.0.md) |
+| Comprendre l’application indépendante | [L’architecture](docs/ARCHITECTURE.md) |
+| Développer ou compiler | [Le guide de développement](docs/DEVELOPPEMENT.md) |
+| Signaler un problème ou proposer une idée | [Les tickets GitHub](https://github.com/jossmair/Voxcalibur/issues) |
+
+Voxcalibur est issu de Transcrinator et reprend les ajouts de sa version intégrée à Ergonatus. Il possède son propre moteur embarqué, ses dossiers, ses raccourcis et ses réglages.
+
+### Licences
+
+Le **code est sous licence [MIT](LICENSE)**. Parakeet Ultra : Moondream/NVIDIA, CC BY 4.0 ; conversion GGUF Q8 par mudler. Silero VAD : MIT. Les licences des modèles et runtimes, dont CUDA, sont incluses dans les distributions ; elles sont distinctes de celle du code.
+
+---
+
+<div align="center">
+
+**Voxcalibur** · Dictée locale pour Windows<br>
+[Installer](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip) · [Utiliser sans installation](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip) · [Voir le code](https://github.com/jossmair/Voxcalibur)
+
+</div>
