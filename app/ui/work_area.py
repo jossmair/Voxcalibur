@@ -34,7 +34,8 @@ def available_area(screen):
     info.size = ctypes.sizeof(info)
     if not user.GetMonitorInfoW(handle, ctypes.byref(info)):
         return fallback
-    rect = lambda r: (r.left, r.top, r.right, r.bottom)
+    def rect(value):
+        return value.left, value.top, value.right, value.bottom
     native = logical_work_area(origin, screen.devicePixelRatio(), rect(info.monitor), rect(info.work))
     # Retain any additional reservation known to Qt.
     area = fallback.intersected(native)

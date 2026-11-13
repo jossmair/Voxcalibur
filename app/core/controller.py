@@ -125,8 +125,10 @@ class Controller(QObject):
         if getattr(self.hardware,'pending_detection',False):
             from app.core.device_detector import detect
             self.status.emit('Préparation de la dictée…')
-            try:self.hardware=await asyncio.to_thread(detect)
-            except Exception:self.hardware.pending_detection=False
+            try:
+                self.hardware = await asyncio.to_thread(detect)
+            except Exception:
+                self.hardware.pending_detection = False
         self.manager = EngineManager(self.hardware)
         try:
             self.focus = (None if self.settings.insertion_strategy in ("auto", "clipboard")

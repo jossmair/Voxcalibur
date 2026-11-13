@@ -10,6 +10,8 @@ Parlez. Retrouvez vos mots dans votre application.<br>Le moteur et les modèles 
 
 <img src="docs/media/platform.svg" width="800" alt="Windows 10/11 x64 · Hors ligne · Moteur inclus · Version 1.1.0">
 
+[![Windows validation](https://github.com/jossmair/Voxcalibur/actions/workflows/ci.yml/badge.svg)](https://github.com/jossmair/Voxcalibur/actions/workflows/ci.yml)
+
 <br>
 
 <a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip"><img src="docs/media/download-installer.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version installable, 1,89 Go"></a> <a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip"><img src="docs/media/download-portable.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version portable, 1,87 Go"></a>
@@ -107,7 +109,7 @@ La palette de langues propose une recherche et une navigation au clavier. Parake
 
 Ces contrôles portent sur la **version 1.1.0**. La précision dépend de la voix, du bruit ambiant et des mots prononcés. Les essais de transcription réels ont été effectués sur CPU et CUDA ; Vulkan est inclus et sélectionné sur les configurations compatibles.
 
-[Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
+[Validation continue](docs/CI.md) · [Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
 
 ## Documentation et code
 

@@ -1,0 +1,64 @@
+name: Windows validation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows / Python ${{ matrix.python }}
+    runs-on: windows-2025
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
+    env:
+      PYTHONUTF8: '1'
+      QT_QPA_PLATFORM: offscreen
+      VOXCALIBUR_DATA: ${{ runner.temp }}/voxcalibur-ci-${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Install locked dependencies
+        run: python -m pip install -r requirements-lock.txt
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Lint application, tools and tests
+        run: python -m ruff check . --output-format github
+      - name: Run all automated tests
+        run: python -m pytest -q --junitxml=test-results/pytest.xml -o faulthandler_timeout=60
+      - name: Build Windows application
+        if: matrix.python == '3.11'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force test-results | Out-Null
+          python -m PyInstaller --noconfirm Voxcalibur.spec *> test-results/pyinstaller.log
+          if ($LASTEXITCODE -ne 0) { throw 'PyInstaller failed; see the build log.' }
+      - name: Smoke test the compiled command line
+        if: matrix.python == '3.11'
+        shell: pwsh
+        run: |
+          python -c "import pathlib,subprocess; from app import __version__; exe=pathlib.Path('dist')/('Voxcalibur-'+__version__)/'Voxcalibur.exe'; subprocess.run([str(exe.resolve()),'--help'],check=True,timeout=30)"
+      - name: Keep test and build reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-python-${{ matrix.python }}-reports
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14

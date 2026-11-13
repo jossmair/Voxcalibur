@@ -6,13 +6,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.append(str(ROOT.parent / "Redactor" / "app"))
 
-from PySide6.QtCore import QPoint
-from PySide6.QtWidgets import QApplication, QWidget
-import win32gui
-from app.core.settings import Settings
-from app.ui.floating_hub import FloatingHub
-from app.ui.work_area import available_area
-from windows.linked_orbs import move_companions
+from PySide6.QtCore import QPoint  # noqa: E402
+from PySide6.QtWidgets import QApplication, QWidget  # noqa: E402
+import win32gui  # noqa: E402
+from app.core.settings import Settings  # noqa: E402
+from app.ui.floating_hub import FloatingHub  # noqa: E402
+from app.ui.work_area import available_area  # noqa: E402
+from windows.linked_orbs import move_companions  # noqa: E402
 
 app = QApplication([])
 hub = FloatingHub(Settings())
