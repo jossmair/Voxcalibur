@@ -1,4 +1,5 @@
 """Local, explicit vocabulary corrections and French number formatting."""
+
 import re
 import unicodedata
 from decimal import Decimal, InvalidOperation
@@ -8,8 +9,12 @@ from text_to_num import alpha2digit
 from app.core.units import abbreviate
 
 
-VOCABULARY_CATEGORIES = (("proper_name", "Noms propres"), ("city", "Villes"),
-                         ("product", "Produits"), ("technical", "Mots techniques"))
+VOCABULARY_CATEGORIES = (
+    ("proper_name", "Noms propres"),
+    ("city", "Villes"),
+    ("product", "Produits"),
+    ("technical", "Mots techniques"),
+)
 CATEGORY_LABELS = dict(VOCABULARY_CATEGORIES)
 
 
@@ -47,8 +52,12 @@ def normalize_vocabulary(entries):
         aliases = entry.get("aliases", [])
         if not isinstance(aliases, list):
             aliases = []
-        normalized = {"name": name, "aliases": list(dict.fromkeys(
-            alias.strip() for alias in aliases if isinstance(alias, str) and alias.strip()))}
+        normalized = {
+            "name": name,
+            "aliases": list(
+                dict.fromkeys(alias.strip() for alias in aliases if isinstance(alias, str) and alias.strip())
+            ),
+        }
         category = entry.get("category")
         if isinstance(category, str) and category in CATEGORY_LABELS:
             normalized["category"] = category
@@ -59,8 +68,9 @@ def normalize_vocabulary(entries):
 def pattern_for(terms):
     if not terms:
         return None
-    alternatives = [r"\s+".join(re.escape(part) for part in term.split())
-                    for term in sorted(terms, key=len, reverse=True)]
+    alternatives = [
+        r"\s+".join(re.escape(part) for part in term.split()) for term in sorted(terms, key=len, reverse=True)
+    ]
     return re.compile(r"(?<!\w)(?:" + "|".join(alternatives) + r")(?!\w)")
 
 
@@ -72,8 +82,9 @@ class Vocabulary:
             for term in [entry["name"], *entry["aliases"]]:
                 candidates.setdefault(key(term), set()).add(entry["name"])
         self.ambiguous = {term for term, names in candidates.items() if len(names) > 1}
-        self.replacements = {term: next(iter(names)) for term, names in candidates.items()
-                             if len(names) == 1 and term}
+        self.replacements = {
+            term: next(iter(names)) for term, names in candidates.items() if len(names) == 1 and term
+        }
         self.pattern = pattern_for(self.replacements)
         self.names_pattern = pattern_for({key(entry["name"]) for entry in self.entries})
 
@@ -98,6 +109,7 @@ class Vocabulary:
             if canonical[:1].islower() and original[:1].isupper():
                 return canonical[0].upper() + canonical[1:]
             return canonical
+
         return self.replace_matches(text, self.pattern, replacement)
 
     def protect(self, text):
@@ -112,7 +124,9 @@ class Vocabulary:
 
 
 NUMERIC = re.compile(r"(?<!\w)[+-]?\d+(?:(?:[ \u00a0\u202f]+\d+)|(?:[.,:/-]\d+))*(?!\w)")
-URL = re.compile(r"\b(?:https?://|www\.)[^\s<>]+|\b[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}|\b[\w-]+(?:\.[\w-]+)*\.[a-zA-Z]{2,}(?:/[^\s<>]*)?")
+URL = re.compile(
+    r"\b(?:https?://|www\.)[^\s<>]+|\b[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}|\b[\w-]+(?:\.[\w-]+)*\.[a-zA-Z]{2,}(?:/[^\s<>]*)?"
+)
 MASK = re.compile(r"[\ue000\ue010][\U000f0000-\U000ffffd][\ue001\ue011]")
 
 
@@ -121,7 +135,7 @@ def protect_urls(text):
 
     def mask(match):
         original = match.group().rstrip(".,;:!?…")
-        suffix = match.group()[len(original):]
+        suffix = match.group()[len(original) :]
         token = "\ue010" + chr(0xF0000 + len(saved)) + "\ue011"
         saved[token] = original
         return token + suffix
@@ -168,10 +182,13 @@ def number_in_words(match):
 
 
 class TextPostprocessor:
-    def __init__(self, entries=(), number_style="digits", abbreviate_units=True):
+    def __init__(
+        self, entries=(), number_style="digits", abbreviate_units=True, short_dictation_unpunctuated=True
+    ):
         self.vocabulary = Vocabulary(entries)
         self.number_style = number_style
         self.abbreviate_units = abbreviate_units
+        self.short_dictation_unpunctuated = short_dictation_unpunctuated
 
     def apply(self, text):
         text, opaque = protect_urls(text)
@@ -184,4 +201,4 @@ class TextPostprocessor:
         elif self.number_style == "digits":
             text = alpha2digit(text, "fr", threshold=2)
         text = restore(restore(text, saved), opaque)
-        return short_dictation(text)
+        return short_dictation(text) if self.short_dictation_unpunctuated else text

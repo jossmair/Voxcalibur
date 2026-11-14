@@ -220,9 +220,11 @@ def test_failed_option_saves_revert_toggles_and_keep_dictionary_editor(tmp_path,
     def fail(*_):
         raise PermissionError("synthetic write denial")
     monkeypatch.setattr(Settings, "save", fail)
-    window.number_style.setChecked(False)
-    window.units.setChecked(False)
-    assert window.number_style.isChecked() and window.units.isChecked()
+    window.number_style.setCurrentIndex(window.number_style.findData("words"))
+    window.units.setChecked(True)
+    window.short_punctuation.setChecked(False)
+    assert window.number_style.currentData() == "original" and not window.units.isChecked()
+    assert window.short_punctuation.isChecked()
     assert controller.commands.empty() and window.preferences.vocabulary == WORDS
     dialog = VocabularyDialog(WORDS, save_callback=lambda entries: window.save_text_options(vocabulary=entries))
     dialog.show()

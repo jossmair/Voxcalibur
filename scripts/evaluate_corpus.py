@@ -103,7 +103,14 @@ async def evaluate(args):
     manifest = load_manifest(args.manifest)
     root = Path(__file__).resolve().parents[1]
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-    settings = Settings(acceleration=args.acceleration, language="fr-FR", vocabulary=[])
+    settings = Settings(
+        acceleration=args.acceleration,
+        language="fr-FR",
+        vocabulary=[],
+        number_style=args.number_style,
+        abbreviate_units=args.abbreviate_units,
+        short_dictation_unpunctuated=not args.keep_short_punctuation,
+    )
     hardware = detect()
     manager = EngineManager(hardware)
     selected = manifest["cases"][: args.limit] if args.limit else manifest["cases"]
@@ -122,6 +129,7 @@ async def evaluate(args):
             "vocabulary": [],
             "number_style": settings.number_style,
             "abbreviate_units": settings.abbreviate_units,
+            "short_dictation_unpunctuated": settings.short_dictation_unpunctuated,
             "progressive": settings.progressive,
         },
         "environment": {
@@ -174,7 +182,9 @@ async def evaluate(args):
             runtime_filename=Path(engine.dll).name,
             vocabulary_status=engine.vocabulary_status,
         )
-        postprocessor = TextPostprocessor([], settings.number_style, settings.abbreviate_units)
+        postprocessor = TextPostprocessor(
+            [], settings.number_style, settings.abbreviate_units, settings.short_dictation_unpunctuated
+        )
         for index, case in enumerate(selected):
             original = read_audio(args.manifest.parent / case["audio"])
             for condition in args.conditions:
@@ -241,6 +251,9 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--acceleration", choices=("cpu", "auto", "gpu"), default="cpu")
     parser.add_argument("--conditions", nargs="+", choices=tuple(CONDITIONS), default=list(CONDITIONS))
+    parser.add_argument("--number-style", choices=("original", "digits", "words"), default="original")
+    parser.add_argument("--abbreviate-units", action="store_true")
+    parser.add_argument("--keep-short-punctuation", action="store_true")
     parser.add_argument("--seed", type=int, default=20261113)
     parser.add_argument("--limit", type=int)
     args = parser.parse_args()

@@ -98,15 +98,17 @@ def test_ui_saves_both_options_without_reloading_model(tmp_path, monkeypatch):
     app = QApplication.instance() or QApplication([])
     controller = Controller(Settings(), Hardware("test", 4, 16 * 2**30, 8 * 2**30))
     window = MainWindow(controller)
-    window.units.setChecked(False)
+    window.units.setChecked(True)
     kind, value = controller.commands.get_nowait()
-    assert kind == "text_options" and value["abbreviate_units"] is False
-    window.number_style.setChecked(False)
+    assert kind == "text_options" and value["abbreviate_units"] is True
+    window.units.setChecked(False)
+    assert controller.commands.get_nowait()[1]["abbreviate_units"] is False
+    window.number_style.setCurrentIndex(window.number_style.findData("words"))
     kind, value = controller.commands.get_nowait()
     assert kind == "text_options" and value["number_style"] == "words"
     assert value["abbreviate_units"] is False and Settings.load().number_style == "words"
     assert TextPostprocessor([], value["number_style"], value["abbreviate_units"]).apply("25 kilogrammes") == "vingt-cinq kilogrammes"
-    window.number_style.setChecked(True)
+    window.number_style.setCurrentIndex(window.number_style.findData("digits"))
     assert controller.commands.get_nowait()[1]["number_style"] == "digits"
     assert Settings.load().number_style == "digits"
     window.startup.setChecked(True)

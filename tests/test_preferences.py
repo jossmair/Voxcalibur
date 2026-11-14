@@ -34,8 +34,8 @@ def test_ui_rebind_is_immediate_and_does_not_queue_model_load(tmp_path, monkeypa
     app.processEvents()
     window.units.setFocus()
     QTest.keyClick(window.units, Qt.Key_Space)
-    assert not window.units.isChecked()
-    assert not Settings.load().abbreviate_units
+    assert window.units.isChecked()
+    assert Settings.load().abbreviate_units
     assert controller.commands.get_nowait()[0] == "text_options"
     window.hide()
     window.deleteLater()

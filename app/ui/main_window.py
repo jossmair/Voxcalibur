@@ -1,15 +1,21 @@
 """One screen with compact amber preferences and no transcript panel."""
+
 from dataclasses import replace
 from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtWidgets import (
-    QFrame, QGridLayout, QHBoxLayout, QMainWindow,
-    QScrollArea, QVBoxLayout, QWidget,
+    QFrame,
+    QGridLayout,
+    QHBoxLayout,
+    QMainWindow,
+    QScrollArea,
+    QVBoxLayout,
+    QWidget,
 )
 
 from app.core import autostart
 from app.core.hotkeys import TRIGGER_KEYS, trigger_spec
 from app.ui.premium import Chrome, HeroArtwork, HudShell, VoiceOrb, label
-from app.ui.preferences import DictionaryButton, PreferencesCard, Toggle
+from app.ui.preferences import DictionaryButton, PreferencesCard, Toggle, ChoiceBox
 from app.core.languages import LANGUAGES
 from app.ui.key_picker import TriggerChoiceBox
 from app.ui.language_picker import LanguageChoiceBox
@@ -58,7 +64,7 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(24, 0, 24, 18)
         layout.setSpacing(10)
         hero = self.hero = HeroArtwork()
-        hero.setFixedHeight(150)
+        hero.setFixedHeight(110)
         hero_layout = QVBoxLayout(hero)
         hero_layout.setContentsMargins(0, 6, 0, 6)
         hero_layout.addStretch()
@@ -120,6 +126,7 @@ class MainWindow(QMainWindow):
         self.trigger_key.currentIndexChanged.connect(self.save_trigger)
         box.addWidget(self.trigger_key)
         grid.addWidget(tile, 0, 0)
+
         def toggle_tile(title, example, toggle):
             tile = QFrame()
             tile.setObjectName("PreferenceTile")
@@ -133,11 +140,19 @@ class MainWindow(QMainWindow):
             row.addWidget(toggle)
             return tile
 
-        self.number_style = Toggle("Écrire les nombres en chiffres")
-        self.number_style.setChecked(self.preferences.number_style == "digits")
-        self.number_hint = label(self.number_example(), "PreferenceHint")
-        self.number_style.toggled.connect(self.save_text_options)
-        grid.addWidget(toggle_tile("Nombres en chiffres", self.number_hint, self.number_style), 0, 1)
+        tile, box = selector("ÉCRITURE DES NOMBRES")
+        self.number_style = ChoiceBox()
+        self.number_style.setAccessibleName("Écriture des nombres")
+        for name, identity in (
+            ("Sortie du moteur", "original"),
+            ("En chiffres", "digits"),
+            ("En lettres", "words"),
+        ):
+            self.number_style.addItem(name, identity)
+        self.number_style.setCurrentIndex(max(0, self.number_style.findData(self.preferences.number_style)))
+        self.number_style.currentIndexChanged.connect(self.save_text_options)
+        box.addWidget(self.number_style)
+        grid.addWidget(tile, 0, 1)
         self.units = Toggle("Abréger les unités")
         self.units.setChecked(self.preferences.abbreviate_units)
         self.units.toggled.connect(self.save_text_options)
@@ -155,7 +170,9 @@ class MainWindow(QMainWindow):
         self.language.currentIndexChanged.connect(self.save_engine_options)
         box.addWidget(self.language)
         hint = label("Reconnaissance automatique par Parakeet", "PreferenceHint")
-        hint.setToolTip("Le modèle Ultra détecte la langue dans l’audio ; ce choix ne force pas son décodage.")
+        hint.setToolTip(
+            "Le modèle Ultra détecte la langue dans l’audio ; ce choix ne force pas son décodage."
+        )
         self.language.setToolTip(hint.toolTip())
         hint.deleteLater()
         grid.addWidget(tile, 2, 0)
@@ -165,6 +182,19 @@ class MainWindow(QMainWindow):
         self.gpu_hint = label("", "PreferenceHint")
         self.gpu_hint.hide()
         grid.addWidget(toggle_tile("Booster avec la carte graphique", self.gpu_hint, self.gpu), 2, 1)
+        self.short_punctuation = Toggle("Supprimer la ponctuation des dictées de moins de cinq mots")
+        self.short_punctuation.setChecked(self.preferences.short_dictation_unpunctuated)
+        self.short_punctuation.setToolTip(
+            "Coché : supprime la ponctuation de phrase pour 1 à 4 mots. Décoché : conserve la ponctuation du moteur. Décimales, heures et liens sont préservés."
+        )
+        self.short_punctuation.toggled.connect(self.save_text_options)
+        grid.addWidget(
+            toggle_tile("Dictées courtes sans ponctuation", "Moins de 5 mots", self.short_punctuation),
+            3,
+            0,
+            1,
+            2,
+        )
         self.hardware_timer = QTimer(self)
         self.hardware_timer.setInterval(300)
         self.hardware_timer.timeout.connect(self.refresh_gpu)
@@ -188,8 +218,11 @@ class MainWindow(QMainWindow):
             self.gpu.setEnabled(False)
             return
         from app.services.engine_manager import choose_backend
+
         try:
-            compatible = bool(hardware.gpus) and choose_backend("parakeet", "gpu", hardware, probe=False) != "cpu"
+            compatible = (
+                bool(hardware.gpus) and choose_backend("parakeet", "gpu", hardware, probe=False) != "cpu"
+            )
         except RuntimeError:
             compatible = False
         self.gpu.blockSignals(True)
@@ -201,8 +234,11 @@ class MainWindow(QMainWindow):
         self.hardware_timer.stop()
 
     def save_engine_options(self, *_):
-        candidate = replace(self.preferences, language=self.language.currentData(),
-                            acceleration="auto" if self.gpu.isChecked() else "cpu")
+        candidate = replace(
+            self.preferences,
+            language=self.language.currentData(),
+            acceleration="auto" if self.gpu.isChecked() else "cpu",
+        )
         try:
             candidate.save()
         except OSError:
@@ -239,34 +275,47 @@ class MainWindow(QMainWindow):
         self.notice.show()
 
     def edit_vocabulary(self):
-        dialog = VocabularyDialog(self.preferences.vocabulary, self,
-            save_callback=lambda entries: self.save_text_options(vocabulary=entries))
+        dialog = VocabularyDialog(
+            self.preferences.vocabulary,
+            self,
+            save_callback=lambda entries: self.save_text_options(vocabulary=entries),
+        )
         dialog.exec()
 
     def save_text_options(self, *_, vocabulary=None):
-        candidate = replace(self.preferences,
-            number_style="digits" if self.number_style.isChecked() else "words",
+        candidate = replace(
+            self.preferences,
+            number_style=self.number_style.currentData(),
             abbreviate_units=self.units.isChecked(),
-            vocabulary=self.preferences.vocabulary if vocabulary is None else vocabulary)
+            short_dictation_unpunctuated=self.short_punctuation.isChecked(),
+            vocabulary=self.preferences.vocabulary if vocabulary is None else vocabulary,
+        )
         try:
             candidate.save()
         except OSError:
-            for toggle, checked in ((self.number_style, self.preferences.number_style == "digits"),
-                                    (self.units, self.preferences.abbreviate_units)):
+            self.number_style.blockSignals(True)
+            self.number_style.setCurrentIndex(self.number_style.findData(self.preferences.number_style))
+            self.number_style.blockSignals(False)
+            for toggle, checked in (
+                (self.units, self.preferences.abbreviate_units),
+                (self.short_punctuation, self.preferences.short_dictation_unpunctuated),
+            ):
                 toggle.blockSignals(True)
                 toggle.setChecked(checked)
                 toggle.blockSignals(False)
-            self.number_hint.setText(self.number_example())
             self.show_error("Les modifications n’ont pas pu être enregistrées. Réessayez.")
             return False
         self.preferences = candidate
-        self.number_hint.setText(self.number_example())
-        self.controller.request("text_options", {"vocabulary": self.preferences.vocabulary,
-            "number_style": self.preferences.number_style, "abbreviate_units": self.preferences.abbreviate_units})
+        self.controller.request(
+            "text_options",
+            {
+                "vocabulary": candidate.vocabulary,
+                "number_style": candidate.number_style,
+                "abbreviate_units": candidate.abbreviate_units,
+                "short_dictation_unpunctuated": candidate.short_dictation_unpunctuated,
+            },
+        )
         return True
-
-    def number_example(self):
-        return "vingt-cinq → 25" if self.number_style.isChecked() else "25 → vingt-cinq"
 
     def save_trigger(self, *_):
         previous = self.preferences.trigger_key

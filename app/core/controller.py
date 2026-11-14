@@ -36,7 +36,12 @@ class Controller(QObject):
     def __init__(self, settings, hardware):
         super().__init__()
         self.settings, self.hardware = replace(settings), hardware
-        self.text_processor = TextPostprocessor(settings.vocabulary, settings.number_style, settings.abbreviate_units)
+        self.text_processor = TextPostprocessor(
+            settings.vocabulary,
+            settings.number_style,
+            settings.abbreviate_units,
+            settings.short_dictation_unpunctuated,
+        )
         self.commands = queue.Queue(maxsize=16)
         self.stop_requested = threading.Event()
         self.shutdown = threading.Event()
@@ -122,17 +127,17 @@ class Controller(QObject):
         return engine
 
     async def _run(self):
-        if getattr(self.hardware,'pending_detection',False):
+        if getattr(self.hardware, "pending_detection", False):
             from app.core.device_detector import detect
-            self.status.emit('Préparation de la dictée…')
+
+            self.status.emit("Préparation de la dictée…")
             try:
                 self.hardware = await asyncio.to_thread(detect)
             except Exception:
                 self.hardware.pending_detection = False
         self.manager = EngineManager(self.hardware)
         try:
-            self.focus = (None if self.settings.insertion_strategy in ("auto", "clipboard")
-                          else FocusManager())
+            self.focus = None if self.settings.insertion_strategy in ("auto", "clipboard") else FocusManager()
             self.injector = TextInjector(self.focus, self.settings.insertion_strategy)
             await self._process_commands()
         finally:
@@ -159,18 +164,32 @@ class Controller(QObject):
                     break
                 if kind == "configure":
                     self.settings = replace(value)
-                    self.text_processor = TextPostprocessor(self.settings.vocabulary, self.settings.number_style,
-                                                            self.settings.abbreviate_units)
+                    self.text_processor = TextPostprocessor(
+                        self.settings.vocabulary,
+                        self.settings.number_style,
+                        self.settings.abbreviate_units,
+                        self.settings.short_dictation_unpunctuated,
+                    )
                     await self._prepare()
                     await self._update_recognition_vocabulary()
                 elif kind == "load":
                     await self._prepare()
                 elif kind == "text_options":
                     self.settings.vocabulary = normalize_vocabulary(value.get("vocabulary", []))
-                    self.settings.number_style = value.get("number_style", "digits")
-                    self.settings.abbreviate_units = value.get("abbreviate_units", self.settings.abbreviate_units)
-                    self.text_processor = TextPostprocessor(self.settings.vocabulary, self.settings.number_style,
-                                                            self.settings.abbreviate_units)
+                    self.settings.number_style = value.get("number_style", self.settings.number_style)
+                    self.settings.abbreviate_units = value.get(
+                        "abbreviate_units",
+                        self.settings.abbreviate_units,
+                    )
+                    self.settings.short_dictation_unpunctuated = value.get(
+                        "short_dictation_unpunctuated", self.settings.short_dictation_unpunctuated
+                    )
+                    self.text_processor = TextPostprocessor(
+                        self.settings.vocabulary,
+                        self.settings.number_style,
+                        self.settings.abbreviate_units,
+                        self.settings.short_dictation_unpunctuated,
+                    )
                     await self._update_recognition_vocabulary()
                 elif kind in ("toggle", "transcription_test"):
                     if kind == "transcription_test":
@@ -476,4 +495,3 @@ class Controller(QObject):
             self.diagnostic.microphone = "inactif"
             self.level.emit(0)
             self.partial.emit("")
-

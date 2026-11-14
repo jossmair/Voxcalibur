@@ -46,9 +46,11 @@ def main():
     args = parser.parse_args()
     if args.check_insertion:
         from app.services.insertion_validation import validate
+
         return validate(args.check_insertion, max(0, min(args.insertion_delay_ms, 5000)))
     if args.check_text_options:
         from app.services.text_options_probe import probe
+
         return probe(args.check_text_options)
     if args.probe_parakeet_runtime:
         from app.services.runtime_probe import probe
@@ -119,6 +121,7 @@ def main():
         window.showNormal()
         window.raise_()
         window.activateWindow()
+
     icon = QIcon(str(asset("voxcalibur.ico")))
     application.setWindowIcon(icon)
     tray = QSystemTrayIcon(icon, application)
@@ -171,8 +174,9 @@ def main():
         window.show_error(message)
 
     controller.error.connect(report_error)
-    hotkey = GlobalHotkey(lambda: controller.request("toggle"), settings.hotkey == "double",
-                          trigger_key=settings.trigger_key)
+    hotkey = GlobalHotkey(
+        lambda: controller.request("toggle"), settings.hotkey == "double", trigger_key=settings.trigger_key
+    )
 
     def change_trigger(identity):
         hotkey.set_trigger(identity)
@@ -192,21 +196,31 @@ def main():
                 nonlocal snapshot_saved
                 args.ui_snapshot.parent.mkdir(parents=True, exist_ok=True)
                 main_saved = window.grab().save(str(args.ui_snapshot))
-                window.preferences_panel.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-options.png")))
+                window.preferences_panel.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-options.png"))
+                )
                 window.trigger_key.showPopup()
                 popup = window.trigger_key.popup
                 menu_picture = popup.grab()
-                menu_saved = menu_picture.save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-keys.png")))
+                menu_saved = menu_picture.save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-keys.png"))
+                )
                 menu_transparent = menu_picture.toImage().pixelColor(0, 0).alpha() == 0
                 menu_compact = popup.width() == 322 and popup.height() < 270 and len(popup.buttons) == 16
                 window.trigger_key.hidePopup()
-                application.sendEvent(hub, QContextMenuEvent(
-                    QContextMenuEvent.Mouse, QPoint(18, 18), hub.mapToGlobal(QPoint(18, 18))))
+                application.sendEvent(
+                    hub,
+                    QContextMenuEvent(
+                        QContextMenuEvent.Mouse, QPoint(18, 18), hub.mapToGlobal(QPoint(18, 18))
+                    ),
+                )
                 application.processEvents()
                 orb_menu_shared = tray.contextMenu() is menu and menu.isVisible()
                 menu.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-tray-menu.png")))
                 menu.close()
-                hub_saved = hub.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-hub.png")))
+                hub_saved = hub.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-hub.png"))
+                )
                 normal_position = [hub.x(), hub.y()]
                 screen = QGuiApplication.screenAt(QCursor.pos()) or QGuiApplication.primaryScreen()
                 area = screen.availableGeometry()
@@ -214,74 +228,100 @@ def main():
                 ready_compacted = hub.compacted and hub.width() == hub.height() == 36
                 hub.last_active -= 21
                 hub.animate()
-                compact_saved = hub.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-halo.png")))
+                compact_saved = hub.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-halo.png"))
+                )
                 compact_position = [hub.x(), hub.y()]
                 compact_size = [hub.width(), hub.height()]
                 compact_frame = hub.grab().toImage()
-                hub.phase += .9
+                hub.phase += 0.9
                 hub.animate()
                 compact_animated = compact_frame != hub.grab().toImage()
                 hub.set_state("Préparation…")
-                restored = (not hub.compacted and hub.width() == 172 and hub.height() == 44
-                            and hub.pos() == bottom_center(hub.size(), area))
-                hub.unfold_started -= .14
-                hub.activation_started -= .14
-                activation_saved = hub.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-activation.png")))
+                restored = (
+                    not hub.compacted
+                    and hub.width() == 172
+                    and hub.height() == 44
+                    and hub.pos() == bottom_center(hub.size(), area)
+                )
+                hub.unfold_started -= 0.14
+                hub.activation_started -= 0.14
+                activation_saved = hub.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-activation.png"))
+                )
                 hub.unfold_started -= 1
                 hub.set_state("Écoute…")
                 hub.activation_started -= 1
-                hub.set_level(.03)
+                hub.set_level(0.03)
                 for _ in range(20):
                     hub.animate()
-                speech_saved = hub.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-speech.png")))
+                speech_saved = hub.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-speech.png"))
+                )
                 hub.set_state("Traitement…")
                 hub.activation_started -= 1
-                hub.phase = .75
+                hub.phase = 0.75
                 processing_frame = hub.grab().toImage()
-                processing_saved = processing_frame.save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-processing.png")))
+                processing_saved = processing_frame.save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-processing.png"))
+                )
                 hub.phase = 1.3
                 density = processing_frame.devicePixelRatio()
                 region = (int(50 * density), int(12 * density), int(100 * density), int(18 * density))
                 processing_animated = processing_frame.copy(*region) != hub.grab().toImage().copy(*region)
                 processing_quiet = hub.level == 0 and hub.display_level == 0
                 from app.ui.vocabulary_dialog import VocabularyDialog
+
                 dictionary = VocabularyDialog([], window)
                 dictionary.show()
                 application.processEvents()
-                dictionary_saved = dictionary.grab().save(str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-dictionary.png")))
+                dictionary_saved = dictionary.grab().save(
+                    str(args.ui_snapshot.with_name(args.ui_snapshot.stem + "-dictionary.png"))
+                )
                 dictionary.table.item(0, 0).setText("Modification de validation")
                 dictionary.close_button.click()
                 dictionary_closed_without_saving = not dictionary.isVisible() and dictionary.entries == []
                 dictionary.deleteLater()
                 snapshot_saved = main_saved and hub_saved and hub.isVisible()
                 args.ui_snapshot.with_name(args.ui_snapshot.stem + "-ui.json").write_text(
-                    json.dumps({"hub_visible": hub.isVisible(), "hub_state": hub_state,
-                                "orb_uses_tray_context_menu": orb_menu_shared,
-                                "window_translucent": window.testAttribute(Qt.WA_TranslucentBackground),
-                                "normal_position": normal_position, "compact_position": compact_position,
-                                "ready_compacted_immediately": ready_compacted and hub_state == "Prêt",
-                                "compact_size": compact_size, "compact_saved": compact_saved,
-                                "compact_animated": compact_animated,
-                                "activation_saved": activation_saved, "speech_saved": speech_saved,
-                                "units_option_checked": window.units.isChecked(),
-                                "number_toggle_checked": window.number_style.isChecked(),
-                                "main_window_size": [window.width(), window.height()],
-                                "application_name": application.applicationName(),
-                                "options_fully_visible": window.preferences_panel.visibleRegion().boundingRect() == window.preferences_panel.rect(),
-                                "trigger_menu_saved": menu_saved,
-                                "trigger_menu_transparent": menu_transparent,
-                                "trigger_menu_compact": menu_compact,
-                                "caption_icons": len(window.caption_buttons) == 2 and all(not button.text() for button in window.caption_buttons),
-                                "dictionary_saved": dictionary_saved,
-                                "dictionary_closed_without_saving": dictionary_closed_without_saving,
-                                "processing_saved": processing_saved,
-                                "processing_animated": processing_animated,
-                                "processing_without_microphone_energy": processing_quiet,
-                                "startup_option_checked": window.startup.isChecked(),
-                                "trigger_key": window.trigger_key.currentData(),
-                                "transcript_panel_absent": not hasattr(window, "recovery"),
-                                "restored_on_preparation": restored,
-                                "screen": [area.x(), area.y(), area.width(), area.height()]}),
+                    json.dumps(
+                        {
+                            "hub_visible": hub.isVisible(),
+                            "hub_state": hub_state,
+                            "orb_uses_tray_context_menu": orb_menu_shared,
+                            "window_translucent": window.testAttribute(Qt.WA_TranslucentBackground),
+                            "normal_position": normal_position,
+                            "compact_position": compact_position,
+                            "ready_compacted_immediately": ready_compacted and hub_state == "Prêt",
+                            "compact_size": compact_size,
+                            "compact_saved": compact_saved,
+                            "compact_animated": compact_animated,
+                            "activation_saved": activation_saved,
+                            "speech_saved": speech_saved,
+                            "units_option_checked": window.units.isChecked(),
+                            "number_style": window.number_style.currentData(),
+                            "short_dictation_unpunctuated": window.short_punctuation.isChecked(),
+                            "main_window_size": [window.width(), window.height()],
+                            "application_name": application.applicationName(),
+                            "options_fully_visible": window.preferences_panel.visibleRegion().boundingRect()
+                            == window.preferences_panel.rect(),
+                            "trigger_menu_saved": menu_saved,
+                            "trigger_menu_transparent": menu_transparent,
+                            "trigger_menu_compact": menu_compact,
+                            "caption_icons": len(window.caption_buttons) == 2
+                            and all(not button.text() for button in window.caption_buttons),
+                            "dictionary_saved": dictionary_saved,
+                            "dictionary_closed_without_saving": dictionary_closed_without_saving,
+                            "processing_saved": processing_saved,
+                            "processing_animated": processing_animated,
+                            "processing_without_microphone_energy": processing_quiet,
+                            "startup_option_checked": window.startup.isChecked(),
+                            "trigger_key": window.trigger_key.currentData(),
+                            "transcript_panel_absent": not hasattr(window, "recovery"),
+                            "restored_on_preparation": restored,
+                            "screen": [area.x(), area.y(), area.width(), area.height()],
+                        }
+                    ),
                     encoding="utf-8",
                 )
                 quit_app()
@@ -300,6 +340,7 @@ def main():
                 quit_app()
             elif bytes(received) == b"show":
                 show_window()
+
         connection.readyRead.connect(read)
         connection.disconnected.connect(connection.deleteLater)
         if connection.bytesAvailable():
