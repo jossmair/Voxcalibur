@@ -15,6 +15,7 @@ Ainsi, « dix-sept » → « 17 » peut convenir à l’utilisateur tout en augm
 - Le dictionnaire est toujours appliqué : il s’agit de corrections explicitement enregistrées par l’utilisateur.
 - **Dictées courtes sans ponctuation** devient une option indépendante, cochée par défaut pour conserver ce comportement historique. Décochée, elle garde la ponctuation produite par le moteur.
 - Le seuil historique est conservé : **moins de cinq mots**, donc un à quatre. À cinq mots exactement, la ponctuation n’est pas retirée par cette règle. Décimales, heures, apostrophes et liens restent protégés.
+- Le choix de ponctuation s’applique aussi aux autres langues, sans leur imposer les conversions françaises.
 - Le changement est immédiat, conservé au redémarrage et ne recharge pas le modèle.
 
 ## Mise à jour des profils existants

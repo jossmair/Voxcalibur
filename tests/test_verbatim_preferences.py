@@ -122,3 +122,17 @@ def test_short_punctuation_checkbox_saves_immediately(tmp_path, monkeypatch):
     assert not Settings.load().short_dictation_unpunctuated
     window.deleteLater()
     app.processEvents()
+
+
+@pytest.mark.parametrize("enabled,expected", [(True, "Good morning"), (False, "Good morning.")])
+def test_punctuation_preference_is_independent_of_french_formatting(enabled, expected):
+    from app.core.text import TextLedger
+
+    controller = Controller(
+        Settings(language="en", short_dictation_unpunctuated=enabled),
+        Hardware("fixture", 4, 16 * 2**30, 8 * 2**30),
+    )
+    controller.ledger = TextLedger()
+    controller.ledger.confirm("one", "Good morning.")
+    controller._finalize_text()
+    assert controller.ledger.pending == [expected]

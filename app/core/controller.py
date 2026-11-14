@@ -15,7 +15,7 @@ from app.core.focus_manager import FocusManager, TargetError
 from app.core.hotkeys import trigger_spec
 from app.core.state_machine import State, StateMachine
 from app.core.text import TextFormatter, TextLedger
-from app.core.text_options import TextPostprocessor, normalize_vocabulary
+from app.core.text_options import TextPostprocessor, normalize_vocabulary, short_dictation
 from app.core.text_injector import TextInjector
 from app.services.engine_manager import EngineManager
 from app.services.diagnostics import Diagnostics
@@ -354,6 +354,8 @@ class Controller(QObject):
         text = "".join(self.ledger.pending)
         if self.settings.language == "fr-FR":
             text = self.text_processor.apply(text)
+        elif self.settings.short_dictation_unpunctuated:
+            text = short_dictation(text)
         self.ledger.pending[:] = [text] if text else []
         self.ledger.confirmed[:] = [text] if text else []
         self.ledger.finalized = True
