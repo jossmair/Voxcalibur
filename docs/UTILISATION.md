@@ -38,8 +38,9 @@ Le texte complet est copié et collé dans la fenêtre active au moment où il e
 | **Touche de déclenchement** | Maj gauche/droite, Ctrl gauche/droite ou une touche de F1 à F12. Appuyez sur la touche seule pour déclencher. |
 | **Langue de dictée** | Une palette avec recherche et navigation clavier. Votre choix est conservé au prochain lancement. |
 | **Booster avec la carte graphique** | Active l’accélération CUDA/Vulkan compatible. Désactivé, le moteur utilise le CPU. Le bouton est indisponible si aucun GPU compatible n’est détecté. |
-| **Nombres en chiffres** | En français, choisit entre `25` et `vingt-cinq`. |
-| **Unités abrégées** | En français, transforme une quantité telle que `250 grammes` en `250 g`. |
+| **Écriture des nombres** | En français : **Sortie du moteur** (défaut, sans conversion), **En chiffres** ou **En lettres**. |
+| **Unités abrégées** | Désactivé par défaut. En français, abrège les unités accompagnées d’une quantité si vous l’activez. |
+| **Dictées courtes sans ponctuation** | Coché par défaut : retire la ponctuation de phrase sur une dictée de 1 à 4 mots. Décoché : conserve celle du moteur. À 5 mots exactement, cette règle ne retire rien. |
 | **Démarrage Windows** | Active ou désactive le lancement avec votre session Windows. |
 
 Parakeet Ultra détecte la langue de l’audio. Le sélecteur de langue ne force pas le décodeur natif ; il conserve votre préférence et règle l’application des corrections françaises. Pour une autre langue ou la détection automatique, ces corrections françaises ne sont pas appliquées.
@@ -75,3 +76,11 @@ Si le microphone n’est pas disponible, vérifiez son autorisation Windows et l
 - La transcription est réalisée sur votre ordinateur avec les modèles livrés. Aucun compte ni clé API n’est demandé.
 
 [Retour à Voxcalibur](../README.md) · [Télécharger la dernière version](https://github.com/jossmair/Voxcalibur/releases/latest)
+
+## Nouveaux réglages de la 1.2.0
+
+La sortie du moteur conserve les nombres comme ils sont reconnus, en chiffres ou en lettres : ce n’est pas une conversion systématique en lettres. Le dictionnaire personnel reste appliqué. La préférence de ponctuation est indépendante et fonctionne aussi dans les autres langues ; elle ne crée pas une ponctuation absente de la sortie moteur.
+
+À la mise à jour, l’ancienne paire par défaut « chiffres + unités abrégées » devient une fois « sortie du moteur + unités non abrégées ». Les autres choix personnalisés, votre dictionnaire, la langue, la touche et le GPU sont conservés. Les choix effectués ensuite ne sont plus réinitialisés.
+
+[Pourquoi ce changement et quelles sources ?](RECHERCHE-WER-1.2.0.md)

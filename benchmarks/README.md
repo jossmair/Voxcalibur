@@ -14,6 +14,10 @@ Le catalogue FLEURS ne fournit pas d’identifiants de locuteur, de modèle de m
 
 [Consulter le rapport complet](results/fleurs-fr-test-2026-11-13.md), avec WER/CER, intervalles, configuration et fichiers détaillés. Le split de test complet représente 676 enregistrements et 332 phrases distinctes, soit environ 117 minutes uniques.
 
+## Nouveaux réglages 1.2.0
+
+La [relecture des 2 028 sorties existantes](results/defaults-1.2.0-replay.md) vérifie les nouveaux réglages sans nouvelle inférence acoustique. Les hypothèses brutes et le modèle restent identiques. Le script courant utilise `--number-style original` et conserve les unités par défaut ; `--number-style digits --abbreviate-units` permet de sélectionner explicitement les anciennes conversions. `--keep-short-punctuation` désactive la règle des dictées de moins de cinq mots. Pour reproduire la campagne historique, utilisez son commit épinglé.
+
 ## Reproduire
 
 Clonez le dépôt GitHub et utilisez le commit `source_commit` indiqué dans le rapport JSON pour reproduire une mesure publiée. Les archives de sources de la version 1.1.0 sont antérieures à ces outils de benchmark. Depuis la racine du dépôt, avec les dépendances de l’application installées :

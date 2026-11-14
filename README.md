@@ -8,15 +8,15 @@
 
 Parlez. Retrouvez vos mots dans votre application.<br>Le moteur et les modèles sont déjà inclus.
 
-<img src="docs/media/platform.svg" width="800" alt="Windows 10/11 x64 · Hors ligne · Moteur inclus · Version 1.1.0">
+<img src="docs/media/platform.svg" width="800" alt="Windows 10/11 x64 · Hors ligne · Moteur inclus · Version 1.2.0">
 
 [![Windows validation](https://github.com/jossmair/Voxcalibur/actions/workflows/ci.yml/badge.svg)](https://github.com/jossmair/Voxcalibur/actions/workflows/ci.yml)
 
 <br>
 
-<a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip"><img src="docs/media/download-installer.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version installable, 1,89 Go"></a> <a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip"><img src="docs/media/download-portable.svg" width="340" alt="Télécharger Voxcalibur 1.1.0 — Version portable, 1,87 Go"></a>
+<a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Installation.zip"><img src="docs/media/download-installer.svg" width="340" alt="Télécharger Voxcalibur 1.2.0 — Version installable, 1,89 Go"></a> <a href="https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Portable.zip"><img src="docs/media/download-portable.svg" width="340" alt="Télécharger Voxcalibur 1.2.0 — Version portable, 1,87 Go"></a>
 
-[Voir la version 1.1.0](https://github.com/jossmair/Voxcalibur/releases/tag/v1.1.0) · [Guide d’utilisation](docs/UTILISATION.md) · [Nouveautés](docs/RELEASE-1.1.0.md)
+[Voir la version 1.2.0](https://github.com/jossmair/Voxcalibur/releases/tag/v1.2.0) · [Guide d’utilisation](docs/UTILISATION.md) · [Nouveautés](docs/RELEASE-1.2.0.md)
 
 </div>
 
@@ -27,7 +27,7 @@ Parlez. Retrouvez vos mots dans votre application.<br>Le moteur et les modèles 
 Placez le curseur là où vous voulez écrire, puis utilisez votre touche de dictée. Voxcalibur transforme votre voix en texte et le colle dans la fenêtre active.
 
 <p align="center">
-  <img src="docs/media/interface.png" width="820" alt="Interface réelle de Voxcalibur 1.1.0 : Dictée Locale, dictionnaire, raccourci, nombres, unités, démarrage, langue et accélération GPU.">
+  <img src="docs/media/interface.png" width="820" alt="Interface réelle de Voxcalibur 1.2.0 : Dictée Locale, dictionnaire, raccourci, nombres, unités, démarrage, langue et accélération GPU.">
 </p>
 
 <p align="center"><sub>Une seule fenêtre. Vos réglages à portée de main. Un petit orbe pour suivre la dictée.</sub></p>
@@ -56,7 +56,7 @@ Placez le curseur là où vous voulez écrire, puis utilisez votre touche de dic
 </td>
 <td valign="top">
 <h3>Des nombres bien écrits</h3>
-<p>En français, choisissez les <strong>chiffres ou les lettres</strong> et l’abréviation des unités : « 250 grammes » devient « 250 g ».</p>
+<p>Par défaut, conservez l’écriture du moteur. Les modes <strong>chiffres, lettres et unités abrégées</strong> restent disponibles sur demande.</p>
 </td>
 <td valign="top">
 <h3>Une présence discrète</h3>
@@ -64,6 +64,8 @@ Placez le curseur là où vous voulez écrire, puis utilisez votre touche de dic
 </td>
 </tr>
 </table>
+
+**Nouveau en 1.2.0 :** la case « Dictées courtes sans ponctuation » permet de retirer ou de conserver la ponctuation du moteur sur les dictées de moins de cinq mots.
 
 ## Trois gestes pour écrire
 
@@ -80,7 +82,7 @@ Placez le curseur là où vous voulez écrire, puis utilisez votre touche de dic
 | Moteur et modèles | Inclus | Inclus |
 | Suite Ergonatus requise | Non | Non |
 | Taille de l’archive | 1,89 Go | 1,87 Go |
-| Téléchargement | [**Version installable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip) | [**Version portable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip) |
+| Téléchargement | [**Version installable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Installation.zip) | [**Version portable**](https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Portable.zip) |
 
 **Décompressez entièrement l’archive avant de lancer le logiciel.** Pour l’installation, gardez les quatre fichiers ensemble. Pour la version portable, conservez les dossiers `_internal`, `models` et `runtimes` avec l’exécutable. Les préférences restent dans votre profil Windows dans les deux éditions.
 
@@ -105,21 +107,23 @@ La palette de langues propose une recherche et une navigation au clavier. Parake
 
 ## Une version vérifiée
 
-<img src="docs/media/validation.svg" width="1152" alt="Version 1.1.0 : 267 tests automatisés réussis, transcription réelle CPU/CUDA et installation/désinstallation vérifiées.">
+<img src="docs/media/validation.svg" width="1152" alt="Version 1.2.0 : 294 tests automatisés réussis, transcription réelle CPU/CUDA et installation/désinstallation vérifiées.">
 
-Ces contrôles portent sur la **version 1.1.0**. La précision dépend de la voix, du bruit ambiant et des mots prononcés. Les essais de transcription réels ont été effectués sur CPU et CUDA ; Vulkan est inclus et sélectionné sur les configurations compatibles.
+Ces contrôles portent sur la **version 1.2.0**. La précision dépend de la voix, du bruit ambiant et des mots prononcés. Les essais de transcription réels ont été effectués sur CPU et CUDA ; Vulkan est inclus et sélectionné sur les configurations compatibles.
 
-[Validation continue](docs/CI.md) · [Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
+[Validation continue](docs/CI.md) · [Rapports de validation](docs/validation/release.json) · [Empreintes SHA-256](https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/SHA256SUMS.txt) · [Historique des versions](https://github.com/jossmair/Voxcalibur/releases)
 
 ## Précision : une première mesure publique
 
 **676 enregistrements humains · 332 phrases distinctes · 117 minutes de parole française.** Le split de test FLEURS épinglé a été évalué en entier, sur GPU CUDA, avec les réglages par défaut et un dictionnaire vide. Les mêmes extraits ont été évalués sans bruit ajouté puis avec deux niveaux de bruit blanc, soit **2 028 transcriptions**.
 
-| Condition | WER après corrections | WER ASR brut |
-| :-- | --: | --: |
-| Audio d’origine | 5.00 % | 4.62 % |
-| Bruit blanc ajouté · 20 dB SNR | 6.88 % | 6.47 % |
-| Bruit blanc ajouté · 10 dB SNR | 11.81 % | 11.41 % |
+| Condition | WER brut | Ancien défaut 1.1.0 | Défaut 1.2.0 · relecture |
+| :-- | --: | --: | --: |
+| Audio d’origine | 4.62 % | 5.00 % | 4.62 % |
+| Bruit blanc ajouté · 20 dB SNR | 6.47 % | 6.88 % | 6.47 % |
+| Bruit blanc ajouté · 10 dB SNR | 11.41 % | 11.81 % | 11.41 % |
+
+La campagne acoustique d’origine concerne la **1.1.0**. La colonne 1.2.0 réapplique les nouveaux réglages aux mêmes sorties brutes, **sans nouvelle inférence ni modification du modèle ou de la normalisation**. [Comparer les traitements](benchmarks/results/defaults-1.2.0-replay.md).
 
 Le WER est un taux d’erreur pondéré par les mots de référence : plus il est bas, mieux c’est. Le nombre de tests automatisés ne mesure pas cette précision.
 
@@ -132,7 +136,7 @@ Le WER est un taux d’erreur pondéré par les mots de référence : plus il es
 | Pour… | Ouvrir… |
 | :-- | :-- |
 | Installer, dicter et régler Voxcalibur | [Le guide d’utilisation](docs/UTILISATION.md) |
-| Découvrir les changements de la 1.1.0 | [Les notes de version](docs/RELEASE-1.1.0.md) |
+| Découvrir les changements de la 1.2.0 | [Les notes de version](docs/RELEASE-1.2.0.md) |
 | Comprendre l’application indépendante | [L’architecture](docs/ARCHITECTURE.md) |
 | Développer ou compiler | [Le guide de développement](docs/DEVELOPPEMENT.md) |
 | Signaler un problème ou proposer une idée | [Les tickets GitHub](https://github.com/jossmair/Voxcalibur/issues) |
@@ -148,6 +152,6 @@ Le **code est sous licence [MIT](LICENSE)**. Parakeet Ultra : Moondream/NVIDIA, 
 <div align="center">
 
 **Voxcalibur** · Dictée locale pour Windows<br>
-[Installer](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Installation.zip) · [Utiliser sans installation](https://github.com/jossmair/Voxcalibur/releases/download/v1.1.0/Voxcalibur-1.1.0-Portable.zip) · [Voir le code](https://github.com/jossmair/Voxcalibur)
+[Installer](https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Installation.zip) · [Utiliser sans installation](https://github.com/jossmair/Voxcalibur/releases/download/v1.2.0/Voxcalibur-1.2.0-Portable.zip) · [Voir le code](https://github.com/jossmair/Voxcalibur)
 
 </div>

@@ -16,3 +16,5 @@ La reconnaissance acoustique n’a pas été changée. La vérification WER réu
 
 **Installable** : décompressez l’archive et lancez `Installer-Voxcalibur.exe`, avec les quatre fichiers ensemble.
 **Portable** : décompressez entièrement et lancez `Voxcalibur.exe`. Les modèles et les moteurs CPU/CUDA/Vulkan sont inclus.
+
+**Vérification : 294 tests réussis.** Les options de texte et les sept préférences ont également été vérifiées dans l’exécutable compilé. [Relecture WER documentée](https://github.com/jossmair/Voxcalibur/blob/main/benchmarks/results/defaults-1.2.0-replay.md).

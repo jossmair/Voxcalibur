@@ -1,8 +1,8 @@
 {
   "product": "Voxcalibur",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "derived_from": "Current Ergonatus/Transcrinator/source (base 1.3.17 plus suite enhancements)",
-  "tests_passed": 267,
+  "tests_passed": 294,
   "packaged_cpu_transcription": true,
   "packaged_cuda_transcription": true,
   "compiled_interface_matches_preview": true,
@@ -10,15 +10,19 @@
   "suite_feature_parity_report": "suite-feature-parity-110.json",
   "isolated_install_and_uninstall": true,
   "repository": "https://github.com/jossmair/Voxcalibur",
-  "github_release": "https://github.com/jossmair/Voxcalibur/releases/tag/v1.1.0",
-  "github_published": true,
+  "github_release": "https://github.com/jossmair/Voxcalibur/releases/tag/v1.2.0",
+  "github_published": false,
   "headline": [
     "Dict\u00e9e",
     "Locale"
   ],
   "header_badge_removed": true,
-  "compiled_ui_report": "packaged-110-ui.json",
-  "installer_report": "installer-110-packaged.json",
-  "release_assets_verified": true,
-  "latest_github_release": true
+  "compiled_ui_report": "packaged-120-ui.json",
+  "installer_report": "installer-120-packaged.json",
+  "release_assets_verified": false,
+  "latest_github_release": false,
+  "number_style": "original",
+  "abbreviate_units": false,
+  "short_dictation_unpunctuated": true,
+  "wer_comparison": "Replay of 2028 existing ASR outputs; no new acoustic inference"
 }

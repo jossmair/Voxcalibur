@@ -1,0 +1,103 @@
+{
+  "application_version": "1.2.0",
+  "evaluation_type": "stored_asr_postprocessing_replay",
+  "new_acoustic_inference": false,
+  "model_changed": false,
+  "source_report": "fleurs-fr-test-2026-11-13.json",
+  "source_report_sha256": "63cf9fe9c09541a8b0a33a9476b9fd9b87c4622e13943f60350584b697ccfd78",
+  "asr_source_commit": "a75d971b2e7b112daea2210f544ae9ad7e8507ff",
+  "postprocessing_commit": "82d2e76f9f708580aee0abb86c4c1275fcb85850",
+  "postprocessor_sha256": "259c05063958aa3568eac215bcad61582d1afda09ec92845299d4e2ea3046c69",
+  "normalization": "NFC, Unicode casefold, Unicode word tokens; accents and digits preserved",
+  "recordings": 676,
+  "evaluations": 2028,
+  "all_recognized_words_preserved": true,
+  "settings": {
+    "number_style": "original",
+    "abbreviate_units": false,
+    "short_dictation_unpunctuated": true,
+    "vocabulary": []
+  },
+  "summary": {
+    "clean": {
+      "previous_wer": 0.049952769906095464,
+      "new_defaults": {
+        "recordings": 676,
+        "reference_words": 17997,
+        "word_errors": 832,
+        "substitutions": 664,
+        "deletions": 117,
+        "insertions": 51,
+        "wer": 0.046229927210090574,
+        "reference_chars": 102953,
+        "char_errors": 1672,
+        "cer": 0.01624042038600138
+      },
+      "wer_95ci": {
+        "low": 0.04168063470778858,
+        "high": 0.05086526234311937,
+        "confidence": 0.95,
+        "repetitions": 2000,
+        "seed": 20261113,
+        "resampling_unit": "recording",
+        "units": 676
+      }
+    },
+    "white20": {
+      "previous_wer": 0.06878924265155303,
+      "new_defaults": {
+        "recordings": 676,
+        "reference_words": 17997,
+        "word_errors": 1164,
+        "substitutions": 917,
+        "deletions": 168,
+        "insertions": 79,
+        "wer": 0.06467744624104017,
+        "reference_chars": 102953,
+        "char_errors": 2549,
+        "cer": 0.024758870552582246
+      },
+      "wer_95ci": {
+        "low": 0.059226824912139195,
+        "high": 0.07031902455319859,
+        "confidence": 0.95,
+        "repetitions": 2000,
+        "seed": 20261113,
+        "resampling_unit": "recording",
+        "units": 676
+      }
+    },
+    "white10": {
+      "previous_wer": 0.11813079957770739,
+      "new_defaults": {
+        "recordings": 676,
+        "reference_words": 17997,
+        "word_errors": 2054,
+        "substitutions": 1593,
+        "deletions": 323,
+        "insertions": 138,
+        "wer": 0.11413013279991109,
+        "reference_chars": 102953,
+        "char_errors": 5258,
+        "cer": 0.051071848319135915
+      },
+      "wer_95ci": {
+        "low": 0.10578263536496961,
+        "high": 0.12250042972554862,
+        "confidence": 0.95,
+        "repetitions": 2000,
+        "seed": 20261113,
+        "resampling_unit": "recording",
+        "units": 676
+      }
+    }
+  },
+  "limits": [
+    "Speaker identities, microphone models and original noise conditions are unknown for FLEURS.",
+    "Added noise is simulated; this is not a real-microphone or real-room campaign.",
+    "Recording-bootstrap intervals do not estimate generalization to unseen speakers.",
+    "Possible overlap with model training data is not established.",
+    "Punctuation is not scored by this WER normalization.",
+    "This replays existing recognized text; it is not a new recording campaign."
+  ]
+}
