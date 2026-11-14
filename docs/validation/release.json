@@ -11,7 +11,7 @@
   "isolated_install_and_uninstall": true,
   "repository": "https://github.com/jossmair/Voxcalibur",
   "github_release": "https://github.com/jossmair/Voxcalibur/releases/tag/v1.2.0",
-  "github_published": false,
+  "github_published": true,
   "headline": [
     "Dict\u00e9e",
     "Locale"
@@ -19,8 +19,8 @@
   "header_badge_removed": true,
   "compiled_ui_report": "packaged-120-ui.json",
   "installer_report": "installer-120-packaged.json",
-  "release_assets_verified": false,
-  "latest_github_release": false,
+  "release_assets_verified": true,
+  "latest_github_release": true,
   "number_style": "original",
   "abbreviate_units": false,
   "short_dictation_unpunctuated": true,
